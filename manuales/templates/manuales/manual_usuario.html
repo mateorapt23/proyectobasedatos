@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual de Usuario - Sistema de Reservas de Restaurante</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 2rem;
+        }
+        
+        .toc {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .toc h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+        
+        .toc ul {
+            list-style: none;
+        }
+        
+        .toc li {
+            padding: 0.5rem 0;
+        }
+        
+        .toc a {
+            color: #333;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .toc a:hover {
+            color: #667eea;
+        }
+        
+        section {
+            margin-bottom: 3rem;
+        }
+        
+        h2 {
+            color: #667eea;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #667eea;
+        }
+        
+        h3 {
+            color: #764ba2;
+            font-size: 1.5rem;
+            margin: 1.5rem 0 1rem 0;
+        }
+        
+        h4 {
+            color: #555;
+            font-size: 1.2rem;
+            margin: 1rem 0 0.5rem 0;
+        }
+        
+        .feature-box {
+            background: #f8f9fa;
+            border-left: 4px solid #10b981;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .step {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        code {
+            background: #f4f4f4;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #e83e8c;
+        }
+        
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        @media print {
+            .toc, header {
+                page-break-after: always;
+            }
+            
+            section {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📖 Manual de Usuario</h1>
+            <p>Sistema de Reservas de Restaurante</p>
+            <p style="font-size: 0.9rem; margin-top: 1rem;">Versión 1.0 | Enero 2026</p>
+        </header>
+
+        <div class="content">
+            <!-- Tabla de Contenidos -->
+            <div class="toc">
+                <h2>📑 Tabla de Contenidos</h2>
+                <ul>
+                    <li><a href="#introduccion">1. Introducción</a></li>
+                    <li><a href="#registro">2. Registro de Usuario</a></li>
+                    <li><a href="#login">3. Iniciar Sesión</a></li>
+                    <li><a href="#panel">4. Panel del Cliente</a></li>
+                    <li><a href="#reservar">5. Realizar una Reserva</a></li>
+                    <li><a href="#mis-reservas">6. Mis Reservas</a></li>
+                    <li><a href="#facturas">7. Mis Facturas</a></li>
+                    <li><a href="#perfil">8. Mi Perfil</a></li>
+                    <li><a href="#admin">9. Panel de Administración</a></li>
+                    <li><a href="#faq">10. Preguntas Frecuentes</a></li>
+                </ul>
+            </div>
+
+            <!-- 1. Introducción -->
+            <section id="introduccion">
+                <h2>1. Introducción</h2>
+                <p>Bienvenido al <strong>Sistema de Reservas de Restaurante</strong>, una plataforma moderna y fácil de usar diseñada para gestionar reservas de mesas de forma eficiente.</p>
+                
+                <div class="feature-box">
+                    <h4>✨ Características Principales</h4>
+                    <ul>
+                        <li>Reserva de mesas en tiempo real</li>
+                        <li>Visualización del plano del restaurante</li>
+                        <li>Gestión de facturas y garantías</li>
+                        <li>Panel administrativo completo</li>
+                        <li>Generación de reportes en PDF</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <strong>ℹ️ Nota:</strong> Este manual cubre todas las funcionalidades disponibles tanto para clientes como para administradores.
+                </div>
+            </section>
+
+            <!-- 2. Registro de Usuario -->
+            <section id="registro">
+                <h2>2. Registro de Usuario</h2>
+                <p>Para usar el sistema, primero debes crear una cuenta.</p>
+
+                <div class="step">
+                    <h4><span class="step-number">1</span>Acceder a la Página de Registro</h4>
+                    <ul>
+                        <li>En la página principal, haz clic en <code>Registrarse</code></li>
+                        <li>O visita directamente: <code>/clientes/registro/</code></li>
+                    </ul>
+                </div>
+
+                <div class="step">
+                    <h4><span class="step-number">2</span>Completar el Formulario</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Campo</th>
+                                <th>Descripción</th>
+                                <th>Validación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Nombre Completo</strong></td>
+                                <td>Tu nombre y apellido</td>
+                                <td>Se guarda en mayúsculas automáticamente</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cédula</strong></td>
+                                <td>Número de identificación</td>
+                                <td>Debe tener exactamente 10 dígitos</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Teléfono</strong></td>
+                                <td>Número de contacto</td>
+                                <td>Debe tener 10 dígitos</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Email</strong></td>
+                                <td>Correo electrónico</td>
+                                <td>Debe ser válido (ej: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3247414753405b5d72575f535b5e1c515d5f">[email&#160;protected]</a>)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Contraseña</strong></td>
+                                <td>Clave de acceso</td>
+                                <td>Mínimo 8 caracteres recomendados</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Importante:</strong> La cédula y el email deben ser únicos. No puedes registrarte dos veces con los mismos datos.
+                </div>
+            </section>
+
+            <!-- 3. Iniciar Sesión -->
+            <section id="login">
+                <h2>3. Iniciar Sesión</h2>
+                
+                <div class="step">
+                    <h4><span class="step-number">1</span>Ir al Login</h4>
+                    <p>Visita <code>/clientes/login/</code> o haz clic en "Iniciar Sesión" desde la página principal.</p>
+                </div>
+
+                <div class="step">
+                    <h4><span class="step-number">2</span>Ingresar Credenciales</h4>
+                    <ul>
+                        <li><strong>Email:</strong> El correo con el que te registraste</li>
+                        <li><strong>Contraseña:</strong> Tu clave secreta</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <strong>💡 Tip:</strong> Si olvidaste tu contraseña, contacta al administrador del sistema.
+                </div>
+            </section>
+
+            <!-- 4. Panel del Cliente -->
+            <section id="panel">
+                <h2>4. Panel del Cliente</h2>
+                <p>Una vez iniciada la sesión, accederás a tu panel personal donde podrás ver:</p>
+
+                <h3>📊 Estadísticas</h3>
+                <ul>
+                    <li><strong>Reservas Activas:</strong> Reservas futuras confirmadas</li>
+                    <li><strong>Total de Reservas:</strong> Historial completo</li>
+                    <li><strong>Total de Facturas:</strong> Cantidad de facturas generadas</li>
+                    <li><strong>Puntos:</strong> Sistema de puntos (10 puntos por reserva)</li>
+                </ul>
+
+                <h3>📅 Próximas Reservas</h3>
+                <p>Visualiza tus próximas 3 reservas con:</p>
+                <ul>
+                    <li>Número de mesa</li>
+                    <li>Fecha y hora</li>
+                    <li>Número de personas</li>
+                    <li>Estado actual</li>
+                </ul>
+
+                <h3>📝 Actividades Recientes</h3>
+                <p>Historial de las últimas 5 acciones realizadas en tu cuenta.</p>
+            </section>
+
+            <!-- 5. Realizar una Reserva -->
+            <section id="reservar">
+                <h2>5. Realizar una Reserva</h2>
+                <p>Proceso completo para reservar una mesa en 3 pasos simples.</p>
+
+                <div class="step">
+                    <h4><span class="step-number">1</span>Filtrar Disponibilidad</h4>
+                    <ul>
+                        <li>Selecciona la <strong>fecha</strong> deseada</li>
+                        <li>Selecciona la <strong>hora</strong> (almuerzo: 12:00-14:00 | cena: 19:00-22:00)</li>
+                        <li>Haz clic en <code>Filtrar Mesas</code></li>
+                    </ul>
+                    <div class="info-box">
+                        El sistema mostrará las mesas disponibles en <strong style="color: green;">verde</strong> y las ocupadas en <strong style="color: red;">rojo</strong>.
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4><span class="step-number">2</span>Seleccionar Mesa</h4>
+                    <ul>
+                        <li>Haz clic en una mesa <strong style="color: green;">disponible</strong> del plano</li>
+                        <li>La mesa se marcará en <strong style="color: purple;">morado</strong></li>
+                        <li>Verás la capacidad de la mesa seleccionada</li>
+                    </ul>
+                </div>
+
+                <div class="step">
+                    <h4><span class="step-number">3</span>Confirmar Reserva</h4>
+                    <ul>
+                        <li>Ingresa el <strong>número de personas</strong> (1-8)</li>
+                        <li>Verifica los datos en el resumen</li>
+                        <li>Haz clic en <code>Confirmar Reserva</code></li>
+                        <li>Confirma el pago de garantía de <strong>$30.00</strong></li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <h4>⚠️ Sobre la Garantía de Reserva</h4>
+                    <ul>
+                        <li>Costo: <strong>$30.00 USD</strong></li>
+                        <li>Este monto se <strong>descuenta de tu consumo</strong> cuando asistes</li>
+                        <li>Si <strong>NO asistes</strong>, el monto <strong>NO es reembolsable</strong></li>
+                        <li>Se genera automáticamente una factura</li>
+                    </ul>
+                </div>
+
+                <h3>🪑 Capacidad de las Mesas</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mesa</th>
+                            <th>Capacidad</th>
+                            <th>Ideal Para</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1, 7, 10</td>
+                            <td>2 personas</td>
+                            <td>Parejas</td>
+                        </tr>
+                        <tr>
+                            <td>2, 3, 5, 6, 9, 11</td>
+                            <td>4 personas</td>
+                            <td>Familias pequeñas</td>
+                        </tr>
+                        <tr>
+                            <td>4, 12</td>
+                            <td>6 personas</td>
+                            <td>Grupos medianos</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>8 personas</td>
+                            <td>Grupos grandes</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- 6. Mis Reservas -->
+            <section id="mis-reservas">
+                <h2>6. Mis Reservas</h2>
+                <p>Visualiza y gestiona todas tus reservas desde un solo lugar.</p>
+
+                <h3>📋 Estados de Reserva</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Estado</th>
+                            <th>Descripción</th>
+                            <th>Color</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Reservada</strong></td>
+                            <td>Reserva activa y confirmada</td>
+                            <td style="background: #10b981; color: white;">Verde</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Completada</strong></td>
+                            <td>Ya asististe y consumiste</td>
+                            <td style="background: #3b82f6; color: white;">Azul</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cancelada</strong></td>
+                            <td>Reserva cancelada</td>
+                            <td style="background: #ef4444; color: white;">Rojo</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="info-box">
+                    <strong>ℹ️ Nota:</strong> No puedes cancelar reservas desde el panel de cliente. Para cancelaciones, contacta al administrador.
+                </div>
+            </section>
+
+            <!-- 7. Mis Facturas -->
+            <section id="facturas">
+                <h2>7. Mis Facturas</h2>
+                <p>Accede a todas tus facturas generadas automáticamente.</p>
+
+                <h3>💰 Tipos de Facturas</h3>
+                
+                <h4>1. Factura de Garantía</h4>
+                <ul>
+                    <li>Monto fijo: <strong>$30.00</strong></li>
+                    <li>Se genera al confirmar una reserva</li>
+                    <li>Estado inicial: <strong>Pendiente</strong></li>
+                    <li>Incluye: Subtotal, IVA (12%), Total</li>
+                </ul>
+
+                <h4>2. Factura Final</h4>
+                <ul>
+                    <li>Se genera después de tu consumo en el restaurante</li>
+                    <li>El administrador actualiza con el consumo real</li>
+                    <li>Se descuenta la garantía de $30</li>
+                    <li>Estado: <strong>Pagada</strong></li>
+                </ul>
+
+                <div class="feature-box">
+                    <h4>📄 Información en cada Factura</h4>
+                    <ul>
+                        <li>Número de factura único</li>
+                        <li>Fecha de emisión</li>
+                        <li>Detalles del consumo</li>
+                        <li>Subtotal, IVA y Total</li>
+                        <li>Información de la reserva asociada</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 8. Mi Perfil -->
+            <section id="perfil">
+                <h2>8. Mi Perfil</h2>
+                <p>Gestiona tu información personal.</p>
+
+                <h3>✏️ Datos que puedes editar</h3>
+                <ul>
+                    <li><strong>Nombre:</strong> Puedes actualizar tu nombre completo</li>
+                    <li><strong>Teléfono:</strong> Cambiar tu número de contacto</li>
+                </ul>
+
+                <h3>🔒 Datos NO editables</h3>
+                <ul>
+                    <li><strong>Cédula:</strong> Inmutable por seguridad</li>
+                    <li><strong>Email:</strong> Inmutable, usado para login</li>
+                </ul>
+
+                <div class="warning-box">
+                    <strong>⚠️ Importante:</strong> Para cambiar tu email o cédula, contacta al administrador del sistema.
+                </div>
+            </section>
+
+            <!-- 9. Panel de Administración -->
+            <section id="admin">
+                <h2>9. Panel de Administración</h2>
+                <p>Funcionalidades exclusivas para administradores (requiere credenciales de superusuario).</p>
+
+                <h3>🔐 Acceso al Panel Admin</h3>
+                <div class="step">
+                    <h4><span class="step-number">1</span>Iniciar Sesión como Admin</h4>
+                    <ul>
+                        <li>Visita: <code>/admin/login/</code></li>
+                        <li>Ingresa credenciales de <strong>superusuario</strong></li>
+                    </ul>
+                </div>
+
+                <h3>📊 Módulos Disponibles</h3>
+
+                <h4>1. Gestión de Clientes</h4>
+                <ul>
+                    <li>Ver listado completo de clientes</li>
+                    <li><strong>Editar</strong> información de clientes</li>
+                    <li><strong>Eliminar</strong> clientes (con confirmación)</li>
+                    <li>Protección: No se pueden eliminar clientes con reservas activas</li>
+                </ul>
+
+                <h4>2. Gestión de Mesas</h4>
+                <ul>
+                    <li>Filtrar por fecha y hora</li>
+                    <li>Ver estado en tiempo real</li>
+                    <li><strong>Liberar mesas</strong> cuando el cliente termina su consumo</li>
+                    <li>Visualización con código de colores</li>
+                </ul>
+
+                <h4>3. Gestión de Facturas</h4>
+                <ul>
+                    <li>Ver todas las facturas del sistema</li>
+                    <li>Filtrar por: Pendientes / Pagadas / Todas</li>
+                    <li><strong>Actualizar facturas</strong> de garantía con consumo real</li>
+                    <li>Cálculo automático: Subtotal - Garantía + IVA</li>
+                </ul>
+
+                <h4>4. Informes y Reportes</h4>
+                <ul>
+                    <li><strong>Reporte de Clientes:</strong> PDF con todos los clientes registrados</li>
+                    <li><strong>Reporte de Reservas:</strong> PDF filtrado por rango de fechas</li>
+                    <li><strong>Reporte de Mesas:</strong> PDF con estado de mesas en fecha/hora específica</li>
+                </ul>
+
+                <div class="feature-box">
+                    <h4>✨ Funcionalidades Especiales</h4>
+                    <ul>
+                        <li>Generación de PDFs profesionales con ReportLab</li>
+                        <li>Confirmación antes de eliminar registros</li>
+                        <li>Validaciones de integridad de datos</li>
+                        <li>Registro de actividades de clientes</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 10. Preguntas Frecuentes -->
+            <section id="faq">
+                <h2>10. Preguntas Frecuentes</h2>
+
+                <h4>❓ ¿Puedo cancelar mi reserva?</h4>
+                <p>Actualmente no hay opción de auto-cancelación. Debes contactar al restaurante para cancelaciones.</p>
+
+                <h4>❓ ¿Qué pasa si llego tarde?</h4>
+                <p>Se recomienda llegar a tiempo. Si tienes retraso, contacta al restaurante para evitar que liberen tu mesa.</p>
+
+                <h4>❓ ¿Se devuelve la garantía si no asisto?</h4>
+                <p>No, la garantía de $30 NO es reembolsable si no asistes a tu reserva.</p>
+
+                <h4>❓ ¿Cómo se descuenta la garantía?</h4>
+                <p>Cuando asistes, el administrador actualiza tu factura con el consumo real y automáticamente descuenta los $30 de garantía.</p>
+
+                <h4>❓ ¿Puedo reservar para más de 8 personas?</h4>
+                <p>El sistema permite máximo 8 personas por reserva. Para grupos mayores, contacta directamente al restaurante.</p>
+
+                <h4>❓ ¿Con cuánta anticipación puedo reservar?</h4>
+                <p>Puedes reservar desde hoy en adelante, sin límite de anticipación.</p>
+
+                <h4>❓ ¿Puedo tener múltiples reservas activas?</h4>
+                <p>Sí, no hay límite de reservas activas siempre que sean en fechas/horas diferentes.</p>
+
+                <h4>❓ ¿Cómo cambio mi contraseña?</h4>
+                <p>Actualmente debes contactar al administrador para cambios de contraseña.</p>
+
+                <h4>❓ ¿Puedo ver mi historial completo?</h4>
+                <p>Sí, en "Mis Reservas" puedes ver todas tus reservas: pasadas, activas y futuras.</p>
+
+                <h4>❓ ¿El sistema envía confirmaciones por email?</h4>
+                <p>El sistema registra actividades pero no envía emails automáticos. Revisa el panel para confirmaciones.</p>
+            </section>
+        </div>
+
+        <footer>
+            <p><strong>Sistema de Reservas de Restaurante</strong></p>
+            <p>Desarrollado con Django + MongoDB | © 2026</p>
+            <p style="margin-top: 1rem; font-size: 0.9

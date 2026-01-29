@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Facturas - Restaurante Gourmet</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        * { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-base-200">
+    <div class="drawer lg:drawer-open">
+        <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+        
+        <div class="drawer-content flex flex-col">
+            <!-- Navbar -->
+            <div class="navbar bg-base-100 shadow-sm border-b border-base-200">
+                <div class="flex-none lg:hidden">
+                    <label for="my-drawer" class="btn btn-square btn-ghost">
+                        <i class="fas fa-bars text-xl"></i>
+                    </label>
+                </div>
+                <div class="flex-1 px-4">
+                    <h1 class="text-xl font-bold">
+                        <a href="/clientes/panel/" class="btn btn-ghost btn-sm">
+                            <i class="fas fa-arrow-left"></i>
+                        </a>
+                        Mis Facturas
+                    </h1>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="p-4 lg:p-8">
+                <!-- Header -->
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
+                    <div>
+                        <h2 class="text-3xl font-bold mb-2">Facturas y Comprobantes</h2>
+                        <p class="text-base-content/70">Descarga y gestiona tus facturas digitales</p>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div class="stat bg-base-100 rounded-xl shadow-lg border border-base-200">
+                        <div class="stat-figure text-primary">
+                            <i class="fas fa-file-invoice text-3xl"></i>
+                        </div>
+                        <div class="stat-title">Total Facturas</div>
+                        <div class="stat-value text-primary">{{ total_facturas|default:"0" }}</div>
+                    </div>
+                    <div class="stat bg-base-100 rounded-xl shadow-lg border border-base-200">
+                        <div class="stat-figure text-success">
+                            <i class="fas fa-dollar-sign text-3xl"></i>
+                        </div>
+                        <div class="stat-title">Total Gastado</div>
+                        <div class="stat-value text-success text-2xl">${{ total_gastado|default:"0.00" }}</div>
+                    </div>
+                    <div class="stat bg-base-100 rounded-xl shadow-lg border border-base-200">
+                        <div class="stat-figure text-info">
+                            <i class="fas fa-download text-3xl"></i>
+                        </div>
+                        <div class="stat-title">Descargas</div>
+                        <div class="stat-value text-info">{{ total_descargas|default:"0" }}</div>
+                    </div>
+                    <div class="stat bg-base-100 rounded-xl shadow-lg border border-base-200">
+                        <div class="stat-figure text-secondary">
+                            <i class="fas fa-calendar text-3xl"></i>
+                        </div>
+                        <div class="stat-title">Este Mes</div>
+                        <div class="stat-value text-secondary">${{ mes_actual|default:"0.00" }}</div>
+                    </div>
+                </div>
+
+                <!-- Search and Filter -->
+                <div class="card bg-base-100 shadow-xl border border-base-200 mb-6">
+                    <div class="card-body">
+                        <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text font-semibold">Buscar</span>
+                                </label>
+                                <input type="text" placeholder="Número de factura..." class="input input-bordered" id="searchInput">
+                            </div>
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text font-semibold">Desde</span>
+                                </label>
+                                <input type="date" class="input input-bordered" id="fechaDesde">
+                            </div>
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text font-semibold">Hasta</span>
+                                </label>
+                                <input type="date" class="input input-bordered" id="fechaHasta">
+                            </div>
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text font-semibold">Acción</span>
+                                </label>
+                                <button class="btn btn-primary text-white" onclick="filtrarFacturas()">
+                                    <i class="fas fa-search mr-2"></i>
+                                    Buscar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Facturas Table -->
+                <div class="card bg-base-100 shadow-xl border border-base-200">
+                    <div class="card-body">
+                        <div class="overflow-x-auto">
+                            <table class="table table-zebra">
+                                <thead>
+                                    <tr>
+                                        <th>Factura N°</th>
+                                        <th>Fecha</th>
+                                        <th>Reserva</th>
+                                        <th>Monto</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if facturas %}
+                                        {% for factura in facturas %}
+                                        <tr class="factura-item">
+                                            <td>
+                                                <div class="flex items-center gap-2">
+                                                    <i class="fas fa-file-invoice text-primary"></i>
+                                                    <span class="font-mono font-bold">{{ factura.numero }}</span>
+                                                </div>
+                                            </td>
+                                            <td>{{ factura.fecha|date:"d/m/Y" }}</td>
+                                            <td>
+                                                <div>
+                                                    <div class="font-bold">Mesa {{ factura.reserva.numeroMesa }}</div>
+                                                    <div class="text-sm opacity-60">{{ factura.reserva.fecha|date:"d/m/Y" }} - {{ factura.reserva.hora }}</div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="font-bold text-lg">${{ factura.monto }}</span>
+                                                {% if factura.esGarantia %}
+                                                <br><span class="badge badge-warning badge-sm">Garantía</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if factura.estado == "Pagada" %}
+                                                    <div class="badge badge-success text-white">Pagada</div>
+                                                {% else %}
+                                                    <div class="badge badge-warning text-white">Pendiente</div>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <div class="flex gap-2">
+                                                    <button class="btn btn-ghost btn-sm" 
+                                                            onclick="verFactura('{{ factura.id }}', '{{ factura.numero }}', '{{ factura.fecha|date:"d/m/Y" }}', '{{ factura.monto }}', '{{ factura.subtotal }}', '{{ factura.iva }}', '{{ factura.reserva.numeroMesa }}', '{{ factura.reserva.numeroPersonas }}', '{{ factura.reserva.fecha|date:"d/m/Y" }}', '{{ factura.reserva.hora }}', '{{ factura.estado }}', {{ factura.esGarantia|yesno:"true,false" }}, '{{ factura.detallesConsumo }}')">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                    <a href="/facturas/descargar/{{ factura.id }}/" class="btn btn-ghost btn-sm" title="Descargar">
+                                                        <i class="fas fa-download"></i>
+                                                    </a>
+                                                    <a href="/facturas/imprimir/{{ factura.id }}/" target="_blank" class="btn btn-ghost btn-sm" title="Imprimir">
+                                                        <i class="fas fa-print"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="6" class="text-center py-8">
+                                                <i class="fas fa-inbox text-6xl text-base-content/20 mb-4 block"></i>
+                                                <p class="text-base-content/60">No tienes facturas disponibles</p>
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Card -->
+                <div class="card bg-info text-info-content shadow-xl mt-6">
+                    <div class="card-body">
+                        <div class="flex items-start gap-4">
+                            <i class="fas fa-info-circle text-3xl"></i>
+                            <div>
+                                <h3 class="card-title mb-2">Información sobre Facturas</h3>
+                                <ul class="list-disc list-inside space-y-1 text-sm">
+                                    <li>Las facturas de garantía ($30.00) se generan automáticamente al hacer una reserva</li>
+                                    <li>La garantía será descontada de tu consumo cuando asistas al restaurante</li>
+                                    <li>El administrador actualizará tu factura con el consumo real después de tu visita</li>
+                                    <li>Puedes descargar tus facturas en formato PDF en cualquier momento</li>
+                                    <li>Todas las facturas tienen validez legal y pueden ser impresas</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="drawer-side">
+            <label for="my-drawer" class="drawer-overlay"></label>
+            <div class="menu p-4 w-80 min-h-full bg-base-100 border-r border-base-200">
+                <div class="px-4 py-6 border-b border-base-200 mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="avatar placeholder">
+                            <div class="bg-primary text-primary-content rounded-xl w-12">
+                                <i class="fas fa-utensils text-2xl"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="font-bold text-lg">Restaurante</div>
+                            <div class="text-xs text-base-content/60">Abad/Rod</div>
+                        </div>
+                    </div>
+                </div>
+
+                <ul class="space-y-1">
+                    <li><a href="/clientes/panel/"><i class="fas fa-home text-lg"></i> Inicio</a></li>
+                    <li><a href="/reservas/reservar/"><i class="fas fa-calendar-plus text-lg"></i> Nueva Reserva</a></li>
+                    <li><a href="/reservas/mis-reservas/"><i class="fas fa-list text-lg"></i> Mis Reservas</a></li>
+                    <li><a href="/facturas/mis-facturas/" class="active"><i class="fas fa-file-invoice text-lg"></i> Mis Facturas</a></li>
+                    <div class="divider my-2"></div>
+                    <li><a href="/clientes/logout/" class="text-error"><i class="fas fa-sign-out-alt text-lg"></i> Cerrar Sesión</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Invoice Modal -->
+    <dialog id="viewModal" class="modal">
+        <div class="modal-box max-w-2xl">
+            <h3 class="font-bold text-2xl mb-4">
+                <i class="fas fa-file-invoice text-primary mr-2"></i>
+                Factura N° <span id="modalNumero">-</span>
+            </h3>
+            
+            <div class="space-y-4">
+                <!-- Invoice Details -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-base-200 p-4 rounded-lg">
+                        <div class="text-xs opacity-60 mb-1">Fecha de Emisión</div>
+                        <div class="font-bold" id="modalFecha">-</div>
+                    </div>
+                    <div class="bg-base-200 p-4 rounded-lg">
+                        <div class="text-xs opacity-60 mb-1">Monto Total</div>
+                        <div class="font-bold text-2xl text-success" id="modalMonto">$0.00</div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Estado de Factura -->
+                <div class="bg-base-200 p-4 rounded-lg">
+                    <h4 class="font-bold mb-2">Estado</h4>
+                    <div class="flex items-center gap-2">
+                        <div id="modalEstadoBadge" class="badge badge-warning text-white">Pendiente</div>
+                        <div id="modalGarantiaBadge" class="badge badge-info text-white hidden">Garantía</div>
+                    </div>
+                </div>
+
+                <!-- Detalles -->
+                <div class="bg-base-200 p-4 rounded-lg">
+                    <h4 class="font-bold mb-3">Detalles</h4>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="opacity-60">Concepto:</span>
+                            <span class="font-bold" id="modalConcepto">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="opacity-60">Subtotal:</span>
+                            <span class="font-bold" id="modalSubtotal">$0.00</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="opacity-60">IVA (12%):</span>
+                            <span class="font-bold" id="modalIVA">$0.00</span>
+                        </div>
+                        <div class="divider my-2"></div>
+                        <div class="flex justify-between text-lg">
+                            <span class="font-bold">Total:</span>
+                            <span class="font-bold text-success" id="modalTotal">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reserva Details -->
+                <div class="bg-base-200 p-4 rounded-lg">
+                    <h4 class="font-bold mb-3">Detalles de la Reserva</h4>
+                    <div class="grid grid-cols-2 gap-3 text-sm">
+                        <div>
+                            <span class="opacity-60">Mesa:</span>
+                            <span class="font-bold ml-2" id="modalMesa">-</span>
+                        </div>
+                        <div>
+                            <span class="opacity-60">Personas:</span>
+                            <span class="font-bold ml-2" id="modalPersonas">-</span>
+                        </div>
+                        <div>
+                            <span class="opacity-60">Fecha:</span>
+                            <span class="font-bold ml-2" id="modalReservaFecha">-</span>
+                        </div>
+                        <div>
+                            <span class="opacity-60">Hora:</span>
+                            <span class="font-bold ml-2" id="modalReservaHora">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nota sobre garantía -->
+                <div id="modalNotaGarantia" class="alert alert-warning hidden">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <h4 class="font-bold">Factura de Garantía</h4>
+                        <p class="text-sm">Esta es una factura de garantía de reserva. El monto será descontado de tu consumo cuando asistas al restaurante. El administrador actualizará esta factura con el consumo real.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-action">
+                <button type="button" class="btn" onclick="viewModal.close()">Cerrar</button>
+                <button type="button" class="btn btn-primary text-white" onclick="descargarFacturaModal()">
+                    <i class="fas fa-download mr-2"></i>
+                    Descargar PDF
+                </button>
+            </div>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
+
+    <script>
+        let currentFacturaId = null;
+
+        function filtrarFacturas() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const fechaDesde = document.getElementById('fechaDesde').value;
+            const fechaHasta = document.getElementById('fechaHasta').value;
+            
+            // Implement filter logic here
+            console.log('Filtrando:', search, fechaDesde, fechaHasta);
+        }
+
+        function verFactura(id, numero, fecha, monto, subtotal, iva, mesa, personas, reservaFecha, reservaHora, estado, esGarantia, concepto) {
+            currentFacturaId = id;
+            
+            document.getElementById('modalNumero').textContent = numero;
+            document.getElementById('modalFecha').textContent = fecha;
+            document.getElementById('modalMonto').textContent = '$' + monto;
+            document.getElementById('modalSubtotal').textContent = '$' + subtotal;
+            document.getElementById('modalIVA').textContent = '$' + iva;
+            document.getElementById('modalTotal').textContent = '$' + monto;
+            document.getElementById('modalMesa').textContent = mesa;
+            document.getElementById('modalPersonas').textContent = personas;
+            document.getElementById('modalReservaFecha').textContent = reservaFecha;
+            document.getElementById('modalReservaHora').textContent = reservaHora;
+            document.getElementById('modalConcepto').textContent = concepto;
+            
+            // Estado
+            const estadoBadge = document.getElementById('modalEstadoBadge');
+            if (estado === 'Pagada') {
+                estadoBadge.className = 'badge badge-success text-white';
+                estadoBadge.textContent = 'Pagada';
+            } else {
+                estadoBadge.className = 'badge badge-warning text-white';
+                estadoBadge.textContent = 'Pendiente';
+            }
+            
+            // Garantía
+            const garantiaBadge = document.getElementById('modalGarantiaBadge');
+            const notaGarantia = document.getElementById('modalNotaGarantia');
+            if (esGarantia) {
+                garantiaBadge.classList.remove('hidden');
+                notaGarantia.classList.remove('hidden');
+            } else {
+                garantiaBadge.classList.add('hidden');
+                notaGarantia.classList.add('hidden');
+            }
+            
+            viewModal.showModal();
+        }
+
+        function descargarFacturaModal() {
+            if (currentFacturaId) {
+                window.location.href = `/facturas/descargar/${currentFacturaId}/`;
+            }
+        }
+
+        function imprimirFactura(facturaId) {
+            window.open(`/facturas/imprimir/${facturaId}/`, '_blank');
+        }
+    </script>
+</body>
+</html>

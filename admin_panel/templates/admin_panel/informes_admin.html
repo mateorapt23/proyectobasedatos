@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informes - Panel Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        * { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-base-200">
+    <div class="drawer lg:drawer-open">
+        <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+        
+        <div class="drawer-content flex flex-col">
+            <div class="navbar bg-base-100 shadow-sm border-b">
+                <div class="flex-none lg:hidden">
+                    <label for="my-drawer" class="btn btn-square btn-ghost"><i class="fas fa-bars"></i></label>
+                </div>
+                <div class="flex-1 px-4">
+                    <a href="{% url 'panel_admin' %}" class="btn btn-ghost btn-sm"><i class="fas fa-arrow-left"></i></a>
+                    <h1 class="text-xl font-bold ml-2">Informes y Reportes</h1>
+                </div>
+            </div>
+
+            <div class="p-4 lg:p-8">
+                <h2 class="text-3xl font-bold mb-2">Generación de Reportes</h2>
+                <p class="text-base-content/70 mb-6">Consulta y descarga informes en formato PDF</p>
+
+                <!-- Info -->
+                <div class="alert alert-info mb-6">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <h3 class="font-bold">Sobre los Reportes</h3>
+                        <p class="text-sm">Todos los reportes se generan en formato PDF dinámicamente desde la base de datos MongoDB. Los datos están siempre actualizados.</p>
+                    </div>
+                </div>
+
+                <!-- Reportes Cards -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    
+                    <!-- Reporte Clientes -->
+                    <div class="card bg-base-100 shadow-xl border-2 border-primary">
+                        <div class="card-body">
+                            <h2 class="card-title text-2xl">
+                                <i class="fas fa-users text-primary mr-2"></i>
+                                Clientes Registrados
+                            </h2>
+                            <p class="text-base-content/70 mb-4">Listado completo de todos los clientes registrados en el sistema con su información de contacto y fecha de registro.</p>
+                            
+                            <div class="bg-base-200 p-4 rounded-lg mb-4">
+                                <div class="text-sm space-y-1">
+                                    <div><i class="fas fa-check text-success mr-2"></i> Nombre completo</div>
+                                    <div><i class="fas fa-check text-success mr-2"></i> Cédula</div>
+                                    <div><i class="fas fa-check text-success mr-2"></i> Email y Teléfono</div>
+                                    <div><i class="fas fa-check text-success mr-2"></i> Fecha de registro</div>
+                                </div>
+                            </div>
+
+                            <div class="card-actions justify-end">
+                                <a href="{% url 'reporte_clientes_pdf' %}" target="_blank" class="btn btn-primary text-white">
+                                    <i class="fas fa-file-pdf mr-2"></i> Generar PDF
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reporte Reservas -->
+                    <div class="card bg-base-100 shadow-xl border-2 border-secondary">
+                        <div class="card-body">
+                            <h2 class="card-title text-2xl">
+                                <i class="fas fa-calendar-check text-secondary mr-2"></i>
+                                Reservas por Fecha
+                            </h2>
+                            <p class="text-base-content/70 mb-4">Reporte de reservas filtradas por rango de fechas. Incluye información del cliente, mesa, hora y estado.</p>
+                            
+                            <form action="{% url 'reporte_reservas_pdf' %}" method="GET" target="_blank">
+                                <div class="form-control mb-3">
+                                    <label class="label"><span class="label-text font-semibold">Fecha Desde</span></label>
+                                    <input type="date" name="fecha_desde" class="input input-bordered" required>
+                                </div>
+                                <div class="form-control mb-4">
+                                    <label class="label"><span class="label-text font-semibold">Fecha Hasta</span></label>
+                                    <input type="date" name="fecha_hasta" class="input input-bordered" required>
+                                </div>
+                                <button type="submit" class="btn btn-secondary text-white w-full">
+                                    <i class="fas fa-file-pdf mr-2"></i> Generar PDF
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Reporte Mesas -->
+                    <div class="card bg-base-100 shadow-xl border-2 border-accent">
+                        <div class="card-body">
+                            <h2 class="card-title text-2xl">
+                                <i class="fas fa-chair text-accent mr-2"></i>
+                                Estado de Mesas
+                            </h2>
+                            <p class="text-base-content/70 mb-4">Consulta el estado de todas las mesas en una fecha y hora específica. Muestra mesas ocupadas y disponibles.</p>
+                            
+                            <form action="{% url 'reporte_mesas_pdf' %}" method="GET" target="_blank">
+                                <div class="form-control mb-3">
+                                    <label class="label"><span class="label-text font-semibold">Fecha</span></label>
+                                    <input type="date" name="fecha" class="input input-bordered" required>
+                                </div>
+                                <div class="form-control mb-4">
+                                    <label class="label"><span class="label-text font-semibold">Hora</span></label>
+                                    <select name="hora" class="select select-bordered" required>
+                                        <option value="">Seleccionar...</option>
+                                        <optgroup label="Almuerzo">
+                                            <option value="12:00">12:00 PM</option>
+                                            <option value="12:30">12:30 PM</option>
+                                            <option value="13:00">1:00 PM</option>
+                                            <option value="13:30">1:30 PM</option>
+                                            <option value="14:00">2:00 PM</option>
+                                        </optgroup>
+                                        <optgroup label="Cena">
+                                            <option value="19:00">7:00 PM</option>
+                                            <option value="19:30">7:30 PM</option>
+                                            <option value="20:00">8:00 PM</option>
+                                            <option value="20:30">8:30 PM</option>
+                                            <option value="21:00">9:00 PM</option>
+                                            <option value="21:30">9:30 PM</option>
+                                            <option value="22:00">10:00 PM</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-accent text-white w-full">
+                                    <i class="fas fa-file-pdf mr-2"></i> Generar PDF
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Info Adicional -->
+                    <div class="card bg-gradient-to-br from-info to-info-focus text-info-content shadow-xl">
+                        <div class="card-body">
+                            <h2 class="card-title text-2xl">
+                                <i class="fas fa-lightbulb mr-2"></i>
+                                Características
+                            </h2>
+                            <div class="space-y-3 text-sm">
+                                <div class="flex items-start gap-2">
+                                    <i class="fas fa-check-circle mt-1"></i>
+                                    <div>
+                                        <strong>Portabilidad:</strong> Los PDFs pueden abrirse en cualquier dispositivo
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-2">
+                                    <i class="fas fa-check-circle mt-1"></i>
+                                    <div>
+                                        <strong>Imprimibles:</strong> Formato optimizado para impresión
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-2">
+                                    <i class="fas fa-check-circle mt-1"></i>
+                                    <div>
+                                        <strong>Actualizados:</strong> Datos en tiempo real desde MongoDB
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-2">
+                                    <i class="fas fa-check-circle mt-1"></i>
+                                    <div>
+                                        <strong>Profesionales:</strong> Diseño estructurado y claro
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="drawer-side">
+            <label for="my-drawer" class="drawer-overlay"></label>
+            <div class="menu p-4 w-80 min-h-full bg-base-100 border-r">
+                <div class="px-4 py-6 border-b mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="avatar placeholder">
+                            <div class="bg-primary text-primary-content rounded-xl w-12">
+                                <i class="fas fa-utensils text-2xl"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="font-bold text-lg">Admin Panel</div>
+                            <div class="text-xs text-base-content/60">Restaurante Abad/Rod</div>
+                        </div>
+                    </div>
+                </div>
+                <ul class="space-y-1">
+                    <li><a href="{% url 'panel_admin' %}"><i class="fas fa-home"></i> Inicio</a></li>
+                    <li><a href="{% url 'clientes_admin' %}"><i class="fas fa-users"></i> Clientes</a></li>
+                    <li><a href="{% url 'mesas_admin' %}"><i class="fas fa-chair"></i> Mesas</a></li>
+                    <li><a href="{% url 'facturas_admin' %}"><i class="fas fa-file-invoice"></i> Facturas</a></li>
+                    <li><a href="{% url 'informes_admin' %}" class="active"><i class="fas fa-chart-bar"></i> Informes</a></li>
+                    <div class="divider"></div>
+                    <li><a href="{% url 'logout_admin' %}" class="text-error"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

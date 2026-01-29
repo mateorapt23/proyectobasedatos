@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurante Abad/Rod - Sistema de Reservas</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .hero-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .feature-card {
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="bg-gray-500">
+    <!-- Navbar -->
+    <div class="navbar bg-base-100 shadow-sm fixed top-0 z-50 px-4 lg:px-20">
+        <div class="navbar-start">
+            <div class="dropdown lg:hidden">
+                <label tabindex="0" class="btn btn-ghost">
+                    <i class="fas fa-bars text-xl text-gray-800"></i>
+                </label>
+                <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+                    <li><a href="#inicio" class="text-gray-700">Inicio</a></li>
+                    <li><a href="#servicios" class="text-gray-700">Servicios</a></li>
+                    <li><a href="#ventajas" class="text-gray-700">Ventajas</a></li>
+                    <li><a href="#contacto" class="text-gray-700">Contacto</a></li>
+                </ul>
+            </div>
+            <a class="btn btn-ghost text-xl font-bold text-gray-800">
+                <i class="fas fa-utensils text-primary"></i>
+                <span class="hidden sm:inline">Restaurante Abad/Rod</span>
+            </a>
+        </div>
+        <div class="navbar-center hidden lg:flex">
+            <ul class="menu menu-horizontal px-1">
+                <li><a href="#inicio" class="font-medium text-gray-700">Inicio</a></li>
+                <li><a href="#servicios" class="font-medium text-gray-700">Servicios</a></li>
+                <li><a href="#ventajas" class="font-medium text-gray-700">Ventajas</a></li>
+                <li><a href="#contacto" class="font-medium text-gray-700">Contacto</a></li>
+            </ul>
+        </div>
+        <div class="navbar-end gap-2">
+            <a href="/clientes/login/" class="btn btn-ghost btn-sm font-semibold text-gray-700">Iniciar Sesión</a>
+            <a href="/clientes/registro/" class="btn btn-primary btn-sm font-semibold text-white">Registrarse</a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="gradient-bg hero-pattern min-h-screen flex items-center pt-20">
+        <div class="container mx-auto px-4 lg:px-20">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="text-white space-y-6">
+                    <div class="badge badge-lg bg-white/20 text-white border-0 backdrop-blur-sm">
+                        <i class="fas fa-sparkles mr-2"></i>
+                        Sistema de Reservas
+                    </div>
+                    <h1 class="text-5xl lg:text-6xl font-bold leading-tight">
+                        Reserva tu mesa en segundos
+                    </h1>
+                    <p class="text-xl text-white/90 leading-relaxed">
+                        Gestiona tus reservas de forma rápida, segura y sin complicaciones. 
+                        Una experiencia diseñada para ti.
+                    </p>
+                    <div class="flex flex-wrap gap-4 pt-4">
+                        <a href="/clientes/registro/" class="btn btn-lg bg-white text-primary hover:bg-base-200 border-0 font-semibold">
+                            <i class="fas fa-rocket mr-2"></i>
+                            Comenzar Ahora
+                        </a>
+                        <a href="#servicios" class="btn btn-lg btn-outline text-white border-white hover:bg-white hover:text-primary font-semibold">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            Más Información
+                        </a>
+                    </div>
+                    <div class="flex items-center gap-8 pt-6">
+                        <div>
+                            <div class="text-3xl font-bold">2,500+</div>
+                            <div class="text-sm text-white/80">Clientes Satisfechos</div>
+                        </div>
+                        <div class="divider divider-horizontal"></div>
+                        <div>
+                            <div class="text-3xl font-bold">5,000+</div>
+                            <div class="text-sm text-white/80">Reservas Realizadas</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden lg:flex justify-center animate-float">
+                    <div class="mockup-phone border-primary">
+                        <div class="camera"></div>
+                        <div class="display">
+                            <div class="artboard artboard-demo phone-1 bg-gradient-to-br from-primary to-secondary">
+                                <div class="p-6 space-y-4">
+                                    <div class="card bg-base-100 shadow-xl">
+                                        <div class="card-body p-4">
+                                            <h3 class="card-title text-sm text-gray-800">Mi Reserva</h3>
+                                            <div class="text-xs space-y-2 text-gray-700">
+                                                <p><i class="fas fa-calendar text-primary"></i> 28 Enero 2026</p>
+                                                <p><i class="fas fa-clock text-primary"></i> 19:30 hrs</p>
+                                                <p><i class="fas fa-users text-primary"></i> 4 personas</p>
+                                                <p><i class="fas fa-chair text-primary"></i> Mesa 12</p>
+                                            </div>
+                                            <div class="badge badge-success badge-sm text-white">Confirmada</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="servicios" class="py-20 bg-base-100">
+        <div class="container mx-auto px-4 lg:px-20">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl lg:text-5xl font-bold mb-4 text-gray-800">¿Por qué elegirnos?</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Ofrecemos la mejor experiencia de reservas con tecnología de última generación
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="card bg-base-100 shadow-xl hover:shadow-2xl feature-card border border-base-200">
+                    <div class="card-body items-center text-center">
+                        <div class="avatar placeholder mb-4">
+                            <div class="bg-primary/10 text-primary rounded-full w-20">
+                                <i class="fas fa-calendar-check text-3xl"></i>
+                            </div>
+                        </div>
+                        <h3 class="card-title text-xl mb-2 text-gray-800">Reservas Instantáneas</h3>
+                        <p class="text-gray-600">
+                            Confirma tu mesa en tiempo real sin esperas ni complicaciones
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="card bg-base-100 shadow-xl hover:shadow-2xl feature-card border border-base-200">
+                    <div class="card-body items-center text-center">
+                        <div class="avatar placeholder mb-4">
+                            <div class="bg-secondary/10 text-secondary rounded-full w-20">
+                                <i class="fas fa-map-marked-alt text-3xl"></i>
+                            </div>
+                        </div>
+                        <h3 class="card-title text-xl mb-2 text-gray-800">Plano Interactivo</h3>
+                        <p class="text-gray-600">
+                            Visualiza y selecciona tu mesa favorita del restaurante
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="card bg-base-100 shadow-xl hover:shadow-2xl feature-card border border-base-200">
+                    <div class="card-body items-center text-center">
+                        <div class="avatar placeholder mb-4">
+                            <div class="bg-accent/10 text-accent rounded-full w-20">
+                                <i class="fas fa-file-invoice text-3xl"></i>
+                            </div>
+                        </div>
+                        <h3 class="card-title text-xl mb-2 text-gray-800">Facturación Digital</h3>
+                        <p class="text-gray-600">
+                            Genera y descarga tus facturas de forma automática
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="card bg-base-100 shadow-xl hover:shadow-2xl feature-card border border-base-200">
+                    <div class="card-body items-center text-center">
+                        <div class="avatar placeholder mb-4">
+                            <div class="bg-info/10 text-info rounded-full w-20">
+                                <i class="fas fa-bell text-3xl"></i>
+                            </div>
+                        </div>
+                        <h3 class="card-title text-xl mb-2 text-gray-800">Notificaciones</h3>
+                        <p class="text-gray-600">
+                            Recibe recordatorios de tus reservas vía email y SMS
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="card bg-base-100 shadow-xl hover:shadow-2xl feature-card border border-base-200">
+                    <div class="card-body items-center text-center">
+                        <div class="avatar placeholder mb-4">
+                            <div class="bg-success/10 text-success rounded-full w-20">
+                                <i class="fas fa-shield-alt text-3xl"></i>
+                            </div>
+                        </div>
+                        <h3 class="card-title text-xl mb-2 text-gray-800">Seguridad Total</h3>
+                        <p class="text-gray-600">
+                            Tus datos protegidos con encriptación de nivel bancario
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="card bg-base-100 shadow-xl hover:shadow-2xl feature-card border border-base-200">
+                    <div class="card-body items-center text-center">
+                        <div class="avatar placeholder mb-4">
+                            <div class="bg-warning/10 text-warning rounded-full w-20">
+                                <i class="fas fa-headset text-3xl"></i>
+                            </div>
+                        </div>
+                        <h3 class="card-title text-xl mb-2 text-gray-800">Soporte 24/7</h3>
+                        <p class="text-gray-600">
+                            Estamos disponibles para ayudarte en todo momento
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section id="ventajas" class="py-20 gradient-bg hero-pattern">
+        <div class="container mx-auto px-4 lg:px-20">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl lg:text-5xl font-bold text-white mb-4">Números que hablan por sí solos</h2>
+                <p class="text-xl text-white/90 max-w-2xl mx-auto">
+                    Miles de clientes confían en nosotros cada día
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="text-center">
+                    <div class="card bg-white/10 backdrop-blur-lg border-white/20 border shadow-xl">
+                        <div class="card-body">
+                            <div class="stat-number text-white">2.5K+</div>
+                            <p class="text-white/90 font-semibold">Clientes Activos</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <div class="card bg-white/10 backdrop-blur-lg border-white/20 border shadow-xl">
+                        <div class="card-body">
+                            <div class="stat-number text-white">5K+</div>
+                            <p class="text-white/90 font-semibold">Reservas Exitosas</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <div class="card bg-white/10 backdrop-blur-lg border-white/20 border shadow-xl">
+                        <div class="card-body">
+                            <div class="stat-number text-white">98%</div>
+                            <p class="text-white/90 font-semibold">Satisfacción</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <div class="card bg-white/10 backdrop-blur-lg border-white/20 border shadow-xl">
+                        <div class="card-body">
+                            <div class="stat-number text-white">24/7</div>
+                            <p class="text-white/90 font-semibold">Disponibilidad</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it Works Section -->
+    <section class="py-20 bg-base-200">
+        <div class="container mx-auto px-4 lg:px-20">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl lg:text-5xl font-bold mb-4 text-gray-800">¿Cómo Funciona?</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    En solo 3 simples pasos tendrás tu mesa reservada
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="avatar placeholder mb-6">
+                        <div class="bg-primary text-primary-content rounded-full w-24">
+                            <span class="text-4xl font-bold">1</span>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 text-gray-800">Regístrate</h3>
+                    <p class="text-gray-600">
+                        Crea tu cuenta en menos de un minuto con tus datos básicos
+                    </p>
+                </div>
+                <div class="text-center">
+                    <div class="avatar placeholder mb-6">
+                        <div class="bg-secondary text-secondary-content rounded-full w-24">
+                            <span class="text-4xl font-bold">2</span>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 text-gray-800">Elige tu Mesa</h3>
+                    <p class="text-gray-600">
+                        Selecciona fecha, hora y tu mesa favorita del plano interactivo
+                    </p>
+                </div>
+                <div class="text-center">
+                    <div class="avatar placeholder mb-6">
+                        <div class="bg-accent text-accent-content rounded-full w-24">
+                            <span class="text-4xl font-bold">3</span>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 text-gray-800">Disfruta</h3>
+                    <p class="text-gray-600">
+                        Recibe confirmación instantánea y prepárate para una experiencia única
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="contacto" class="py-20 bg-base-100">
+        <div class="container mx-auto px-4 lg:px-20">
+            <div class="card bg-gradient-to-r from-primary to-secondary text-primary-content shadow-2xl">
+                <div class="card-body text-center py-16">
+                    <h2 class="card-title text-4xl lg:text-5xl font-bold justify-center mb-4 text-white">
+                        ¿Listo para comenzar?
+                    </h2>
+                    <p class="text-xl mb-8 max-w-2xl mx-auto text-white">
+                        Únete a miles de clientes satisfechos y disfruta de la mejor experiencia de reservas
+                    </p>
+                    <div class="card-actions justify-center">
+                        <a href="/clientes/registro/" class="btn btn-lg bg-white text-primary hover:bg-base-200 border-0 font-semibold">
+                            <i class="fas fa-user-plus mr-2"></i>
+                            Crear Cuenta Gratis
+                        </a>
+                    </div>
+                    <p class="text-sm mt-4 text-white/80">
+                        <i class="fas fa-check-circle mr-2"></i>
+                        • Activación inmediata
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer footer-center p-10 bg-base-200 text-base-content">
+        <div>
+            <div class="text-2xl font-bold mb-2 text-gray-800">
+                <i class="fas fa-utensils text-primary"></i>
+                Restaurante Abad/Rod
+            </div>
+            <p class="font-semibold text-gray-700">
+                Tu experiencia gastronómica perfecta
+            </p> 
+            <p class="text-sm text-gray-600">Copyright © 2026 - Todos los derechos reservados</p>
+        </div> 
+        <div>
+            <div class="grid grid-flow-col gap-4">
+                <a class="btn btn-ghost btn-circle">
+                    <i class="fab fa-facebook-f text-xl text-gray-700"></i>
+                </a> 
+                <a class="btn btn-ghost btn-circle">
+                    <i class="fab fa-instagram text-xl text-gray-700"></i>
+                </a> 
+                <a class="btn btn-ghost btn-circle">
+                    <i class="fab fa-twitter text-xl text-gray-700"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-lg');
+            } else {
+                navbar.classList.remove('shadow-lg');
+            }
+        });
+
+        // ⌨️ ATAJO F1 PARA IR A MANUALES
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'F1') {
+                event.preventDefault(); // Prevenir ayuda del navegador
+                console.log('✅ F1 presionada - Redirigiendo a Manuales');
+                window.location.href = '/manuales/';
+            }
+        });
+
+        // Mensaje en consola
+        console.log('%c⌨️ Atajo Disponible: F1 para Manuales', 'color: #667eea; font-size: 14px; font-weight: bold;');
+    </script>
+</body>
+</html>

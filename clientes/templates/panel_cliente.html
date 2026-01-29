@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Cliente - Restaurante Abad/Rod</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .sidebar-item {
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-item:hover {
+            transform: translateX(4px);
+        }
+
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+        }
+
+        @media (max-width: 1024px) {
+            .drawer-side {
+                z-index: 50;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="drawer lg:drawer-open">
+        <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+        
+        <!-- Main Content -->
+        <div class="drawer-content flex flex-col">
+            <!-- Navbar -->
+            <div class="navbar bg-base-100 shadow-sm border-b border-base-200">
+                <div class="flex-none lg:hidden">
+                    <label for="my-drawer" class="btn btn-square btn-ghost">
+                        <i class="fas fa-bars text-xl"></i>
+                    </label>
+                </div>
+                <div class="flex-1 px-4">
+                    <h1 class="text-xl font-bold">Panel de Cliente</h1>
+                </div>
+                <div class="flex-none">
+                <div class="dropdown dropdown-end">
+                    <label tabindex="0" class="btn btn-ghost btn-circle avatar">
+                        <div class="w-10 h-10 rounded-full bg-primary text-primary-content flex items-center justify-center font-bold text-lg pt-1">
+                            {{ nombre|slice:":1" }}
+                        </div>
+                    </label>
+                    <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-lg bg-base-100 rounded-box w-52 border border-base-200">
+                        <li class="menu-title">
+                            <span class="text-base font-bold">{{ nombre }}</span>
+                        </li>
+                        <li><a><i class="fas fa-user mr-2"></i> Mi Perfil</a></li>
+                        <li><a><i class="fas fa-cog mr-2"></i> Configuración</a></li>
+                        <div class="divider my-1"></div>
+                        <li><a href="/clientes/logout/" class="text-error"><i class="fas fa-sign-out-alt mr-2"></i> Cerrar Sesión</a></li>
+                    </ul>
+                </div>
+            </div>
+            </div>
+
+            <!-- Page Content -->
+            <div class="p-4 lg:p-8 bg-base-200 min-h-screen">
+                <!-- Welcome Section -->
+                <div class="gradient-bg rounded-2xl p-8 text-white mb-6 shadow-xl">
+                    <div class="flex flex-col lg:flex-row items-center justify-between gap-4">
+                        <div>
+                            <h2 class="text-3xl font-bold mb-2">¡Hola, {{ nombre }}!</h2>
+                            <p class="text-white/90">Bienvenido a tu panel de gestión de reservas</p>
+                        </div>
+                        <a href="/reservas/reservar/" class="btn btn-lg bg-white text-primary hover:bg-base-200 border-0 font-semibold">
+                            <i class="fas fa-plus-circle mr-2"></i>
+                            Nueva Reserva
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    <div class="stat bg-base-100 rounded-xl shadow-lg stat-card border border-base-200">
+                        <div class="stat-figure text-primary">
+                            <i class="fas fa-calendar-check text-4xl"></i>
+                        </div>
+                        <div class="stat-title">Reservas Activas</div>
+                        <div class="stat-value text-primary">{{ reservas_activas|default:"0" }}</div>
+                        <div class="stat-desc">Próximas reservas</div>
+                    </div>
+
+                    <div class="stat bg-base-100 rounded-xl shadow-lg stat-card border border-base-200">
+                        <div class="stat-figure text-secondary">
+                            <i class="fas fa-history text-4xl"></i>
+                        </div>
+                        <div class="stat-title">Total Reservas</div>
+                        <div class="stat-value text-secondary">{{ total_reservas|default:"0" }}</div>
+                        <div class="stat-desc">Desde el registro</div>
+                    </div>
+
+                    <div class="stat bg-base-100 rounded-xl shadow-lg stat-card border border-base-200">
+                        <div class="stat-figure text-accent">
+                            <i class="fas fa-file-invoice text-4xl"></i>
+                        </div>
+                        <div class="stat-title">Facturas</div>
+                        <div class="stat-value text-accent">{{ total_facturas|default:"0" }}</div>
+                        <div class="stat-desc">Documentos disponibles</div>
+                    </div>
+
+                    <div class="stat bg-base-100 rounded-xl shadow-lg stat-card border border-base-200">
+                        <div class="stat-figure text-success">
+                            <i class="fas fa-star text-4xl"></i>
+                        </div>
+                        <div class="stat-title">Puntos</div>
+                        <div class="stat-value text-success">{{ puntos|default:"0" }}</div>
+                        <div class="stat-desc">Programa de fidelidad</div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="card bg-base-100 shadow-xl mb-6 border border-base-200">
+                    <div class="card-body">
+                        <h2 class="card-title text-2xl mb-4">
+                            <i class="fas fa-bolt text-primary mr-2"></i>
+                            Acciones Rápidas
+                        </h2>
+                        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                            <a href="/reservas/reservar/" class="btn btn-lg btn-outline flex-col h-auto py-6 gap-2 hover:btn-primary">
+                                <i class="fas fa-calendar-plus text-3xl"></i>
+                                <span class="text-sm">Nueva Reserva</span>
+                            </a>
+                            <a href="/reservas/mis-reservas/" class="btn btn-lg btn-outline flex-col h-auto py-6 gap-2 hover:btn-secondary">
+                                <i class="fas fa-list text-3xl"></i>
+                                <span class="text-sm">Ver Reservas</span>
+                            </a>
+                            <a href="/facturas/mis-facturas/" class="btn btn-lg btn-outline flex-col h-auto py-6 gap-2 hover:btn-accent">
+                                <i class="fas fa-file-alt text-3xl"></i>
+                                <span class="text-sm">Mis Facturas</span>
+                            </a>
+                            <a href="/clientes/perfil/" class="btn btn-lg btn-outline flex-col h-auto py-6 gap-2 hover:btn-info">
+                                <i class="fas fa-user-edit text-3xl"></i>
+                                <span class="text-sm">Mi Perfil</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Próximas Reservas -->
+                    <div class="card bg-base-100 shadow-xl border border-base-200">
+                        <div class="card-body">
+                            <h2 class="card-title text-xl mb-4">
+                                <i class="fas fa-calendar text-primary mr-2"></i>
+                                Próximas Reservas
+                            </h2>
+                            
+                            {% if proximas_reservas %}
+                                <div class="space-y-3">
+                                    {% for reserva in proximas_reservas %}
+                                    <div class="alert shadow-sm border border-base-200">
+                                        <div class="flex items-start gap-3 w-full">
+                                            <div class="avatar placeholder">
+                                                <div class="bg-primary/10 text-primary rounded-full w-12">
+                                                    <i class="fas fa-utensils"></i>
+                                                </div>
+                                            </div>
+                                            <div class="flex-1">
+                                                <div class="font-bold">Mesa {{ reserva.mesa.numeroMesa }}</div>
+                                                <div class="text-sm opacity-70">
+                                                    <i class="fas fa-calendar mr-1"></i>
+                                                    {{ reserva.fecha|date:"d/m/Y" }} 
+                                                    <i class="fas fa-clock ml-2 mr-1"></i>
+                                                    {{ reserva.hora }}
+                                                </div>
+                                                <div class="text-xs opacity-60 mt-1">
+                                                    <i class="fas fa-users mr-1"></i>
+                                                    {{ reserva.numeroPersonas }} personas
+                                                </div>
+                                            </div>
+                                            <div class="badge badge-success text-white">Confirmada</div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="text-center py-8">
+                                    <i class="fas fa-calendar-times text-6xl text-base-content/20 mb-4"></i>
+                                    <p class="text-base-content/60">No tienes reservas próximas</p>
+                                    <a href="/reservas/reservar/" class="btn btn-primary btn-sm mt-4">
+                                        Hacer una Reserva
+                                    </a>
+                                </div>
+                            {% endif %}
+
+                            <div class="card-actions justify-end mt-4">
+                                <a href="/reservas/mis-reservas/" class="btn btn-ghost btn-sm">
+                                    Ver todas <i class="fas fa-arrow-right ml-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actividad Reciente -->
+                    <div class="card bg-base-100 shadow-xl border border-base-200">
+                        <div class="card-body">
+                            <h2 class="card-title text-xl mb-4">
+                                <i class="fas fa-clock text-secondary mr-2"></i>
+                                Actividad Reciente
+                            </h2>
+                            
+                            {% if actividades_recientes %}
+                                <div class="space-y-3">
+                                    {% for actividad in actividades_recientes %}
+                                    <div class="flex items-center gap-3 p-3 bg-base-200 rounded-lg">
+                                        <div class="avatar placeholder">
+                                            <div class="bg-{{ actividad.color }}/10 text-{{ actividad.color }} rounded-full w-10">
+                                                <i class="fas {{ actividad.icono }}"></i>
+                                            </div>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="font-semibold text-sm">{{ actividad.titulo }}</div>
+                                            <div class="text-xs opacity-60">{{ actividad.tiempo_transcurrido }}</div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="text-center py-8">
+                                    <i class="fas fa-inbox text-6xl text-base-content/20 mb-4"></i>
+                                    <p class="text-base-content/60">No hay actividad reciente</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="drawer-side">
+            <label for="my-drawer" class="drawer-overlay"></label>
+            <div class="menu p-4 w-80 min-h-full bg-base-100 border-r border-base-200">
+                <!-- Logo -->
+                <div class="px-4 py-6 border-b border-base-200 mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="avatar placeholder">
+                            <div class="bg-primary text-primary-content rounded-xl w-12">
+                                <i class="fas fa-utensils text-2xl"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="font-bold text-lg">Restaurante</div>
+                            <div class="text-xs text-base-content/60">Abad/Rod</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Profile -->
+                <div class="px-4 py-4 bg-base-200 rounded-xl mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="avatar placeholder">
+                            <div class="bg-primary text-primary-content rounded-full w-12">
+                                <span class="text-xl font-bold">{{ nombre|slice:":1" }}</span>
+                            </div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="font-bold truncate">{{ nombre }}</div>
+                            <div class="text-xs text-base-content/60 truncate">Cliente Premium</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <ul class="space-y-1">
+                    <li>
+                        <a href="/clientes/panel/" class="sidebar-item active">
+                            <i class="fas fa-home text-lg"></i>
+                            Inicio
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/reservas/reservar/" class="sidebar-item">
+                            <i class="fas fa-calendar-plus text-lg"></i>
+                            Nueva Reserva
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/reservas/mis-reservas/" class="sidebar-item">
+                            <i class="fas fa-list text-lg"></i>
+                            Mis Reservas
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/facturas/mis-facturas/" class="sidebar-item">
+                            <i class="fas fa-file-invoice text-lg"></i>
+                            Mis Facturas
+                        </a>
+                    </li>
+                    <div class="divider my-2"></div>
+                    <li>
+                        <a href="/clientes/perfil/" class="sidebar-item">
+                            <i class="fas fa-user text-lg"></i>
+                            Mi Perfil
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="sidebar-item">
+                            <i class="fas fa-cog text-lg"></i>
+                            Configuración
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="sidebar-item">
+                            <i class="fas fa-question-circle text-lg"></i>
+                            Ayuda
+                        </a>
+                    </li>
+                    <div class="divider my-2"></div>
+                    <li>
+                        <a href="/clientes/logout/" class="sidebar-item text-error">
+                            <i class="fas fa-sign-out-alt text-lg"></i>
+                            Cerrar Sesión
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Support Card -->
+                <div class="mt-auto pt-4">
+                    <div class="card bg-primary text-primary-content shadow-xl">
+                        <div class="card-body p-4">
+                            <h3 class="card-title text-sm">
+                                <i class="fas fa-headset"></i>
+                                ¿Necesitas ayuda?
+                            </h3>
+                            <p class="text-xs opacity-90">Nuestro equipo está disponible 24/7</p>
+                            <button class="btn btn-sm bg-white text-primary hover:bg-base-200 border-0 mt-2">
+                                Contactar Soporte
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Close drawer on navigation (mobile)
+        document.querySelectorAll('.drawer-side a').forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth < 1024) {
+                    document.getElementById('my-drawer').checked = false;
+                }
+            });
+        });
+
+        // Active menu item
+        const currentPath = window.location.pathname;
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            if (item.getAttribute('href') === currentPath) {
+                item.classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Reservas - Restaurante Gourmet</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        * { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-base-200">
+    <div class="drawer lg:drawer-open">
+        <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+        
+        <div class="drawer-content flex flex-col">
+            <!-- Navbar -->
+            <div class="navbar bg-base-100 shadow-sm border-b border-base-200">
+                <div class="flex-none lg:hidden">
+                    <label for="my-drawer" class="btn btn-square btn-ghost">
+                        <i class="fas fa-bars text-xl"></i>
+                    </label>
+                </div>
+                <div class="flex-1 px-4">
+                    <h1 class="text-xl font-bold">
+                        <a href="/clientes/panel/" class="btn btn-ghost btn-sm">
+                            <i class="fas fa-arrow-left"></i>
+                        </a>
+                        Mis Reservas
+                    </h1>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="p-4 lg:p-8">
+                <!-- Header -->
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
+                    <div>
+                        <h2 class="text-3xl font-bold mb-2">Gestiona tus Reservas</h2>
+                        <p class="text-base-content/70">Visualiza y administra todas tus reservas</p>
+                    </div>
+                    <a href="/reservas/reservar/" class="btn btn-primary btn-lg text-white">
+                        <i class="fas fa-plus-circle mr-2"></i>
+                        Nueva Reserva
+                    </a>
+                </div>
+
+                <!-- Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div class="stat bg-base-100 rounded-xl shadow-lg border border-base-200">
+                        <div class="stat-figure text-primary">
+                            <i class="fas fa-calendar-check text-3xl"></i>
+                        </div>
+                        <div class="stat-title">Próximas Reservas</div>
+                        <div class="stat-value text-primary">{{ proximas_count|default:"0" }}</div>
+                    </div>
+                    <div class="stat bg-base-100 rounded-xl shadow-lg border border-base-200">
+                        <div class="stat-figure text-success">
+                            <i class="fas fa-check-circle text-3xl"></i>
+                        </div>
+                        <div class="stat-title">Completadas</div>
+                        <div class="stat-value text-success">{{ completadas_count|default:"0" }}</div>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="tabs tabs-boxed bg-base-100 p-1 mb-6 shadow-lg">
+                    <a class="tab tab-lg tab-active" onclick="filterReservas('todas')">
+                        <i class="fas fa-list mr-2"></i>
+                        Todas
+                    </a>
+                    <a class="tab tab-lg" onclick="filterReservas('proximas')">
+                        <i class="fas fa-calendar-alt mr-2"></i>
+                        Próximas
+                    </a>
+                    <a class="tab tab-lg" onclick="filterReservas('pasadas')">
+                        <i class="fas fa-history mr-2"></i>
+                        Pasadas
+                    </a>
+                </div>
+
+                <!-- Reservas List -->
+                <div class="space-y-4">
+                    {% if reservas %}
+                        {% for reserva in reservas %}
+                        <div class="card bg-base-100 shadow-xl border border-base-200 reserva-item" data-tipo="{{ reserva.tipo }}">
+                            <div class="card-body">
+                                <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+                                    <!-- Icon -->
+                                    <div class="lg:col-span-1 flex justify-center">
+                                        <div class="avatar placeholder">
+                                            <div class="bg-primary/10 text-primary rounded-full w-16">
+                                                <i class="fas fa-utensils text-2xl"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Details -->
+                                    <div class="lg:col-span-8 space-y-2">
+                                        <div class="flex items-center gap-3">
+                                            <h3 class="card-title text-xl">Mesa {{ reserva.mesa.numeroMesa }}</h3>
+                                            {% if reserva.estado == "Reservada" %}
+                                                <div class="badge badge-success text-white">{{ reserva.estado }}</div>
+                                            {% elif reserva.estado == "Completada" %}
+                                                <div class="badge badge-info text-white">{{ reserva.estado }}</div>
+                                            {% else %}
+                                                <div class="badge badge-error text-white">{{ reserva.estado }}</div>
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fas fa-calendar text-primary"></i>
+                                                <span>{{ reserva.fecha|date:"d/m/Y" }}</span>
+                                            </div>
+                                            <div class="flex items-center gap-2">
+                                                <i class="fas fa-clock text-primary"></i>
+                                                <span>{{ reserva.hora }}</span>
+                                            </div>
+                                            <div class="flex items-center gap-2">
+                                                <i class="fas fa-users text-primary"></i>
+                                                <span>{{ reserva.numeroPersonas }} personas</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="text-xs text-base-content/60">
+                                            <i class="fas fa-chair mr-1"></i>
+                                            Capacidad: {{ reserva.mesa.capacidad }} personas
+                                        </div>
+                                    </div>
+
+                                    <!-- Actions -->
+                                    <div class="lg:col-span-3 flex flex-wrap gap-2 justify-end">
+                                        <button class="btn btn-sm btn-outline btn-primary" onclick="verDetalles('{{ reserva.id }}', '{{ reserva.mesa.numeroMesa }}', '{{ reserva.fecha|date:"d/m/Y" }}', '{{ reserva.hora }}', '{{ reserva.numeroPersonas }}', '{{ reserva.mesa.capacidad }}', '{{ reserva.estado }}')">
+                                            <i class="fas fa-eye mr-1"></i>
+                                            Ver Detalles
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="card bg-base-100 shadow-xl border border-base-200">
+                            <div class="card-body text-center py-16">
+                                <i class="fas fa-calendar-times text-6xl text-base-content/20 mb-4"></i>
+                                <h3 class="text-2xl font-bold mb-2">No tienes reservas</h3>
+                                <p class="text-base-content/60 mb-6">Comienza haciendo tu primera reserva</p>
+                                <a href="/reservas/reservar/" class="btn btn-primary text-white">
+                                    <i class="fas fa-plus-circle mr-2"></i>
+                                    Crear Primera Reserva
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="drawer-side">
+            <label for="my-drawer" class="drawer-overlay"></label>
+            <div class="menu p-4 w-80 min-h-full bg-base-100 border-r border-base-200">
+                <div class="px-4 py-6 border-b border-base-200 mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="avatar placeholder">
+                            <div class="bg-primary text-primary-content rounded-xl w-12">
+                                <i class="fas fa-utensils text-2xl"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="font-bold text-lg">Restaurante</div>
+                            <div class="text-xs text-base-content/60">Abad/Rod</div>
+                        </div>
+                    </div>
+                </div>
+
+                <ul class="space-y-1">
+                    <li><a href="/clientes/panel/"><i class="fas fa-home text-lg"></i> Inicio</a></li>
+                    <li><a href="/reservas/reservar/"><i class="fas fa-calendar-plus text-lg"></i> Nueva Reserva</a></li>
+                    <li><a href="/reservas/mis-reservas/" class="active"><i class="fas fa-list text-lg"></i> Mis Reservas</a></li>
+                    <li><a href="/facturas/mis-facturas/"><i class="fas fa-file-invoice text-lg"></i> Mis Facturas</a></li>
+                    <div class="divider my-2"></div>
+                    <li><a href="/clientes/logout/" class="text-error"><i class="fas fa-sign-out-alt text-lg"></i> Cerrar Sesión</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detail Modal -->
+    <dialog id="detalleModal" class="modal">
+        <div class="modal-box max-w-md">
+            <h3 class="font-bold text-2xl mb-4">
+                <i class="fas fa-info-circle text-primary mr-2"></i>
+                Detalles de Reserva
+            </h3>
+            <div class="space-y-4">
+                <div class="alert shadow-sm">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Información completa de tu reserva</span>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-base-200 p-3 rounded-lg">
+                        <div class="text-xs opacity-60 mb-1">Mesa</div>
+                        <div class="font-bold text-lg" id="detalleMesa">-</div>
+                    </div>
+                    <div class="bg-base-200 p-3 rounded-lg">
+                        <div class="text-xs opacity-60 mb-1">Estado</div>
+                        <div class="font-bold" id="detalleEstado">-</div>
+                    </div>
+                    <div class="bg-base-200 p-3 rounded-lg">
+                        <div class="text-xs opacity-60 mb-1">Fecha</div>
+                        <div class="font-bold" id="detalleFecha">-</div>
+                    </div>
+                    <div class="bg-base-200 p-3 rounded-lg">
+                        <div class="text-xs opacity-60 mb-1">Hora</div>
+                        <div class="font-bold" id="detalleHora">-</div>
+                    </div>
+                    <div class="bg-base-200 p-3 rounded-lg">
+                        <div class="text-xs opacity-60 mb-1">Personas</div>
+                        <div class="font-bold" id="detallePersonas">-</div>
+                    </div>
+                    <div class="bg-base-200 p-3 rounded-lg">
+                        <div class="text-xs opacity-60 mb-1">Capacidad</div>
+                        <div class="font-bold" id="detalleCapacidad">-</div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info">
+                    <i class="fas fa-dollar-sign"></i>
+                    <div>
+                        <h4 class="font-bold">Garantía de Reserva</h4>
+                        <p class="text-sm">Se cobró $30.00 como garantía. Este monto será descontado de tu consumo al asistir al restaurante.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-action">
+                <button type="button" class="btn btn-primary text-white" onclick="detalleModal.close()">
+                    <i class="fas fa-check mr-2"></i>
+                    Entendido
+                </button>
+            </div>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
+
+    <script>
+        function filterReservas(tipo) {
+            const items = document.querySelectorAll('.reserva-item');
+            const tabs = document.querySelectorAll('.tab');
+            
+            // Update active tab
+            tabs.forEach(tab => tab.classList.remove('tab-active'));
+            event.target.closest('.tab').classList.add('tab-active');
+            
+            // Filter items
+            items.forEach(item => {
+                if (tipo === 'todas') {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = item.dataset.tipo === tipo ? 'block' : 'none';
+                }
+            });
+        }
+
+        function verDetalles(id, mesa, fecha, hora, personas, capacidad, estado) {
+            document.getElementById('detalleMesa').textContent = `Mesa ${mesa}`;
+            document.getElementById('detalleEstado').textContent = estado;
+            document.getElementById('detalleFecha').textContent = fecha;
+            document.getElementById('detalleHora').textContent = hora;
+            document.getElementById('detallePersonas').textContent = personas;
+            document.getElementById('detalleCapacidad').textContent = `${capacidad} personas`;
+            
+            detalleModal.showModal();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual de Instalación - Sistema de Reservas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        header {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .content {
+            padding: 2rem;
+        }
+        
+        .toc {
+            background: #fff7ed;
+            border-left: 4px solid #f59e0b;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .toc h2 {
+            color: #f59e0b;
+            margin-bottom: 1rem;
+        }
+        
+        .toc ul {
+            list-style: none;
+        }
+        
+        .toc li {
+            padding: 0.5rem 0;
+        }
+        
+        .toc a {
+            color: #333;
+            text-decoration: none;
+        }
+        
+        .toc a:hover {
+            color: #f59e0b;
+        }
+        
+        section {
+            margin-bottom: 3rem;
+        }
+        
+        h2 {
+            color: #f59e0b;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f59e0b;
+        }
+        
+        h3 {
+            color: #d97706;
+            font-size: 1.5rem;
+            margin: 1.5rem 0 1rem 0;
+        }
+        
+        h4 {
+            color: #555;
+            font-size: 1.2rem;
+            margin: 1rem 0 0.5rem 0;
+        }
+        
+        .step {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .step-number {
+            background: #f59e0b;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        .warning-box {
+            background: #fee2e2;
+            border-left: 4px solid #ef4444;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .success-box {
+            background: #d1fae5;
+            border-left: 4px solid #10b981;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .info-box {
+            background: #dbeafe;
+            border-left: 4px solid #3b82f6;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        code {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        
+        pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        
+        pre code {
+            background: none;
+            padding: 0;
+        }
+        
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        tr:hover {
+            background: #fff7ed;
+        }
+        
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛠️ Manual de Instalación</h1>
+            <p>Sistema de Reservas de Restaurante</p>
+            <p style="font-size: 0.9rem; margin-top: 1rem;">Versión 1.0 | Enero 2026</p>
+        </header>
+
+        <div class="content">
+            <!-- Tabla de Contenidos -->
+            <div class="toc">
+                <h2>📑 Tabla de Contenidos</h2>
+                <ul>
+                    <li><a href="#requisitos">1. Requisitos del Sistema</a></li>
+                    <li><a href="#instalacion">2. Instalación Paso a Paso</a></li>
+                    <li><a href="#configuracion">3. Configuración</a></li>
+                    <li><a href="#estructura">4. Estructura del Proyecto</a></li>
+                    <li><a href="#base-datos">5. Base de Datos MongoDB</a></li>
+                    <li><a href="#despliegue">6. Despliegue en Producción</a></li>
+                    <li><a href="#troubleshooting">7. Solución de Problemas</a></li>
+                </ul>
+            </div>
+
+            <!-- 1. Requisitos -->
+            <section id="requisitos">
+                <h2>1. Requisitos del Sistema</h2>
+
+                <h3>💻 Software Requerido</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Software</th>
+                            <th>Versión Mínima</th>
+                            <th>Propósito</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Python</strong></td>
+                            <td>3.10+</td>
+                            <td>Lenguaje base del proyecto</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Django</strong></td>
+                            <td>6.0.1</td>
+                            <td>Framework web</td>
+                        </tr>
+                        <tr>
+                            <td><strong>MongoDB</strong></td>
+                            <td>5.0+</td>
+                            <td>Base de datos NoSQL</td>
+                        </tr>
+                        <tr>
+                            <td><strong>pip</strong></td>
+                            <td>Latest</td>
+                            <td>Gestor de paquetes Python</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>📦 Dependencias Principales</h3>
+                <ul>
+                    <li><code>mongoengine</code> - ODM para MongoDB</li>
+                    <li><code>reportlab</code> - Generación de PDFs</li>
+                    <li><code>django-cors-headers</code> - Manejo de CORS</li>
+                </ul>
+
+                <h3>🌐 Navegadores Soportados</h3>
+                <ul>
+                    <li>Google Chrome 90+</li>
+                    <li>Mozilla Firefox 88+</li>
+                    <li>Microsoft Edge 90+</li>
+                    <li>Safari 14+</li>
+                </ul>
+            </section>
+
+            <!-- 2. Instalación -->
+            <section id="instalacion">
+                <h2>2. Instalación Paso a Paso</h2>
+
+                <div class="step">
+                    <h4><span class="step-number">1</span>Instalar Python</h4>
+                    <p>Descarga e instala Python desde <a href="https://www.python.org/downloads/" target="_blank">python.org</a></p>
+                    <p>Verifica la instalación:</p>
+                    <pre><code>python --version
+# Debe mostrar: Python 3.10.x o superior</code></pre>
+                </div>
+
+                <div class="step">
+                    <h4><span class="step-number">2</span>Instalar MongoDB</h4>
+                    <p>Descarga MongoDB Community Server desde <a href="https://www.mongodb.com/try/download/community" target="_blank">mongodb.com</a></p>
+                    
+                    <h5>Windows:</h5>
+                    <pre><code># Ejecutar el instalador .msi
+# Instalar como servicio de Windows
+# Puerto por defecto: 27017</code></pre>
+
+                    <h5>Linux:</h5>
+                    <pre><code>sudo apt-get update
+sudo apt-get install -y mongodb-org
+sudo systemctl start mongod
+sudo systemctl enable mongod</code></pre>
+
+                    <p>Verificar instalación:</p>
+                    <pre><code>mongod --version</code></pre>
+                </div>
+
+                <div class="step">
+                    <h4><span class="step-number">3</span>Clonar el Proyecto</h4>
+                    <pre><code># Opción 1: Clonar desde Git (si está en repositorio)
+git clone https://github.com/tu-usuario/restaurante-reservas.git
+cd restaurante-reservas
+
+# Opción 2: Descomprimir archivo ZIP
+unzip restaurante-reservas.zip
+cd restaurante-reservas</code></pre>
+                </div>
+
+                <div class="step">
+                    <h4><span class="step-number">4</span>Crear Entorno Virtual</h4>
+                    <pre><code># Windows
+python -m venv venv
+venv\\Scripts\\activate
+
+# Linux/Mac
+python3 -m venv venv
+source venv/bin/activate</code></pre>
+
+                    <div class="success-box">
+                        <strong>✅ Verificar:</strong> El prompt debe mostrar <code>(venv)</code> al inicio
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4><span class="step-number">5</span>Instalar Dependencias</h4>
+                    <pre><code># Actualizar pip
+python -m pip install --upgrade pip
+
+# Instalar todas las dependencias
+pip install -r requirements.txt</code></pre>
+
+                    <div class="info-box">
+                        <strong>📝 Nota:</strong> Si no existe <code>requirements.txt</code>, instala manualmente:
+                        <pre><code>pip install django==6.0.1
+pip install mongoengine
+pip install reportlab
+pip install django-cors-headers</code></pre>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4><span class="step-number">6</span>Configurar Variables de Entorno</h4>
+                    <p>Crea un archivo <code>.env</code> en la raíz del proyecto:</p>
+                    <pre><code># .env
+DEBUG=True
+SECRET_KEY=tu-clave-secreta-django-aqui
+MONGODB_NAME=restaurante_db
+MONGODB_HOST=localhost
+MONGODB_PORT=27017</code></pre>
+                </div>
+
+                <div class="step">
+                    <h4><span class="step-number">7</span>Crear Base de Datos MongoDB</h4>
+                    <pre><code># Conectar a MongoDB
+mongosh
+
+# Crear base de datos
+use restaurante_db
+
+# Crear colecciones (opcional, se crean automáticamente)
+db.createCollection("clientes")
+db.createCollection("reservas")
+db.createCollection("facturas")
+
+# Salir
+exit</code></pre>
+                </div>
+
+                <div class="step">
+                    <h4><span class="step-number">8</span>Migrar Base de Datos Django</h4>
+                    <pre><code># Crear migraciones
+python manage.py makemigrations
+
+# Aplicar migraciones
+python manage.py migrate</code></pre>
+
+                    <div class="info-box">
+                        <strong>ℹ️ Nota:</strong> Django usa SQLite para autenticación. MongoDB se usa para datos de negocio.
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4><span class="step-number">9</span>Crear Superusuario</h4>
+                    <pre><code>python manage.py createsuperuser
+
+# Ingresar:
+# - Username: admin
+# - Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3f5e5b5256517f5a475e524f535a115c5052">[email&#160;protected]</a> (opcional)
+# - Password: (tu contraseña segura)</code></pre>
+                </div>
+
+                <div class="step">
+                    <h4><span class="step-number">10</span>Crear Mesas Iniciales</h4>
+                    <p>Ejecuta el shell de Django:</p>
+                    <pre><code>python manage.py shell</code></pre>
+                    
+                    <p>Luego ejecuta este código:</p>
+                    <pre><code>from mongoengine import connect, Document
+from mongoengine.fields import IntField, StringField
+
+# Conectar a MongoDB
+connect(db='restaurante_db', host='localhost', port=27017)
+
+# Definir modelo Mesa
+class Mesa(Document):
+    numeroMesa = IntField(required=True, unique=True)
+    capacidad = IntField(required=True)
+    estado = StringField(default="Disponible")
+
+# Crear mesas
+mesas_data = [
+    {'numeroMesa': 1, 'capacidad': 2},
+    {'numeroMesa': 2, 'capacidad': 4},
+    {'numeroMesa': 3, 'capacidad': 4},
+    {'numeroMesa': 4, 'capacidad': 6},
+    {'numeroMesa': 5, 'capacidad': 4},
+    {'numeroMesa': 6, 'capacidad': 4},
+    {'numeroMesa': 7, 'capacidad': 2},
+    {'numeroMesa': 8, 'capacidad': 8},
+    {'numeroMesa': 9, 'capacidad': 4},
+    {'numeroMesa': 10, 'capacidad': 2},
+    {'numeroMesa': 11, 'capacidad': 4},
+    {'numeroMesa': 12, 'capacidad': 6},
+]
+
+for data in mesas_data:
+    Mesa(**data).save()
+
+print("✅ Mesas creadas exitosamente")
+exit()</code></pre>
+                </div>
+
+                <div class="step">
+                    <h4><span class="step-number">11</span>Ejecutar el Servidor</h4>
+                    <pre><code>python manage.py runserver</code></pre>
+
+                    <div class="success-box">
+                        <strong>🎉 ¡Éxito!</strong> El servidor está corriendo en:
+                        <ul>
+                            <li>Frontend: <code>http://127.0.0.1:8000/</code></li>
+                            <li>Panel Admin: <code>http://127.0.0.1:8000/admin/login/</code></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Configuración -->
+            <section id="configuracion">
+                <h2>3. Configuración</h2>
+
+                <h3>⚙️ Settings.py</h3>
+                <p>Ubicación: <code>restaurante_reservas/settings.py</code></p>
+
+                <h4>Configuración de MongoDB:</h4>
+                <pre><code>from mongoengine import connect
+
+connect(
+    db='restaurante_db',
+    host='localhost',
+    port=27017
+)</code></pre>
+
+                <h4>Apps Instaladas:</h4>
+                <pre><code>INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'core',           # Landing page
+    'clientes',       # Gestión de clientes
+    'reservas',       # Sistema de reservas
+    'facturas',       # Sistema de facturación
+    'admin_panel',    # Panel administrativo
+]</code></pre>
+
+                <h4>Configuración de Templates:</h4>
+                <pre><code>TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [BASE_DIR / 'templates'],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]</code></pre>
+
+                <h3>🗺️ URLs Principales</h3>
+                <p>Ubicación: <code>restaurante_reservas/urls.py</code></p>
+                <pre><code>from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('django-admin/', admin.site.urls),      # Admin Django
+    path('', include('core.urls')),              # Landing
+    path('clientes/', include('clientes.urls')), # Clientes
+    path('reservas/', include('reservas.urls')), # Reservas
+    path('facturas/', include('facturas.urls')), # Facturas
+    path('admin/', include('admin_panel.urls')), # Panel Admin
+]</code></pre>
+            </section>
+
+            <!-- 4. Estructura del Proyecto -->
+            <section id="estructura">
+                <h2>4. Estructura del Proyecto</h2>
+
+                <pre><code>restaurante_reservas/
+├── manage.py
+├── requirements.txt
+├── .env
+├── db.sqlite3                    # SQLite para autenticación Django
+│
+├── restaurante_reservas/         # Configuración principal
+│   ├── __init__.py
+│   ├── settings.py              # ⚙️ Configuración
+│   ├── urls.py                  # 🗺️ URLs principales
+│   └── wsgi.py
+│
+├── core/                         # Landing page
+│   ├── views.py
+│   ├── urls.py
+│   └── templates/
+│       └── landing.html
+│
+├── clientes/                     # App de clientes
+│   ├── models.py                # Cliente, Actividad
+│   ├── views.py                 # Registro, Login, Panel
+│   ├── urls.py
+│   ├── validators.py
+│   └── templates/
+│       ├── registro.html
+│       ├── login.html
+│       ├── panel_cliente.html
+│       └── perfil.html
+│
+├── reservas/                     # App de reservas
+│   ├── models.py                # Reserva, MesaEmbed, ClienteEmbed
+│   ├── views.py                 # Reservar, Mis Reservas
+│   ├── urls.py
+│   └── templates/
+│       ├── reservar_mesa.html
+│       ├── mis_reservas.html
+│       └── detalle_reserva.html
+│
+├── facturas/                     # App de facturas
+│   ├── models.py                # Factura, embededs
+│   ├── views.py                 # Mis Facturas
+│   ├── urls.py
+│   └── templates/
+│       └── mis_facturas.html
+│
+└── admin_panel/                  # Panel administrativo
+    ├── models.py
+    ├── views.py                 # Gestión completa
+    ├── urls.py
+    └── templates/
+        └── admin_panel/
+            ├── login_admin.html
+            ├── panel_admin.html
+            ├── clientes_admin.html
+            ├── mesas_admin.html
+            ├── facturas_admin.html
+            └── informes_admin.html</code></pre>
+            </section>
+
+            <!-- 5. Base de Datos -->
+            <section id="base-datos">
+                <h2>5. Base de Datos MongoDB</h2>
+
+                <h3>📊 Colecciones</h3>
+
+                <h4>1. Clientes</h4>
+                <pre><code>{
+  "_id": ObjectId("..."),
+  "nombre": "JUAN PÉREZ",
+  "ci": "1234567890",
+  "telefono": "0999999999",
+  "email": "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="442e31252a042129252d286a272b29">[email&#160;protected]</a>",
+  "password": "hash_bcrypt",
+  "fecha_registro": ISODate("2026-01-28"),
+  "actividad": [
+    {
+      "descripcion": "Reserva confirmada...",
+      "fecha": ISODate("2026-01-28")
+    }
+  ]
+}</code></pre>
+
+                <h4>2. Reservas</h4>
+                <pre><code>{
+  "_id": ObjectId("..."),
+  "cliente": {
+    "idCliente": "...",
+    "nombre": "JUAN PÉREZ",
+    "ci": "1234567890"
+  },
+  "mesa": {
+    "numeroMesa": 5,
+    "capacidad": 4
+  },
+  "fecha": ISODate("2026-02-01"),
+  "hora": "19:00",
+  "numeroPersonas": 3,
+  "estado": "Reservada"
+}</code></pre>
+
+                <h4>3. Facturas</h4>
+                <pre><code>{
+  "_id": ObjectId("..."),
+  "numero": "FAC-001",
+  "cliente": { ... },
+  "reserva": { ... },
+  "fechaEmision": ISODate("2026-01-28"),
+  "esGarantia": true,
+  "subtotal": 30.00,
+  "iva": 3.60,
+  "total": 33.60,
+  "estado": "Pendiente",
+  "detallesConsumo": "Garantía de Reserva"
+}</code></pre>
+
+                <h3>🔧 Comandos Útiles MongoDB</h3>
+                <pre><code># Conectar a la base de datos
+mongosh
+use restaurante_db
+
+# Ver todas las colecciones
+show collections
+
+# Contar documentos
+db.clientes.countDocuments()
+db.reservas.countDocuments()
+db.facturas.countDocuments()
+
+# Ver todos los clientes
+db.clientes.find().pretty()
+
+# Buscar reservas por estado
+db.reservas.find({"estado": "Reservada"})
+
+# Eliminar todos los documentos (cuidado!)
+db.clientes.deleteMany({})
+db.reservas.deleteMany({})
+db.facturas.deleteMany({})</code></pre>
+            </section>
+
+            <!-- 6. Despliegue -->
+            <section id="despliegue">
+                <h2>6. Despliegue en Producción</h2>
+
+                <div class="warning-box">
+                    <strong>⚠️ Antes de desplegar:</strong>
+                    <ul>
+                        <li>Cambiar <code>DEBUG = False</code> en settings.py</li>
+                        <li>Configurar <code>ALLOWED_HOSTS</code></li>
+                        <li>Usar variables de entorno para secretos</li>
+                        <li>Configurar servidor web (Nginx/Apache)</li>
+                        <li>Usar Gunicorn o uWSGI</li>
+                    </ul>
+                </div>
+
+                <h3>🚀 Opciones de Despliegue</h3>
+
+                <h4>Opción 1: Heroku</h4>
+                <pre><code># Instalar Heroku CLI
+# Crear Procfile
+echo "web: gunicorn restaurante_reservas.wsgi" > Procfile
+
+# Crear requirements.txt
+pip freeze > requirements.txt
+
+# Desplegar
+heroku create mi-restaurante
+git push heroku main</code></pre>
+
+                <h4>Opción 2: DigitalOcean/AWS</h4>
+                <ul>
+                    <li>Configurar droplet/EC2 con Ubuntu</li>
+                    <li>Instalar Nginx + Gunicorn</li>
+                    <li>Configurar MongoDB en la nube (Atlas)</li>
+                    <li>Configurar SSL con Let's Encrypt</li>
+                </ul>
+
+                <h4>Opción 3: PythonAnywhere</h4>
+                <ul>
+                    <li>Subir código al servidor</li>
+                    <li>Configurar Web App</li>
+                    <li>Usar MongoDB Atlas (PythonAnywhere no soporta MongoDB local)</li>
+                </ul>
+            </section>
+
+            <!-- 7. Troubleshooting -->
+            <section id="troubleshooting">
+                <h2>7. Solución de Problemas</h2>
+
+                <h3>❌ Error: "No module named 'mongoengine'"</h3>
+                <p><strong>Solución:</strong></p>
+                <pre><code>pip install mongoengine</code></pre>
+
+                <h3>❌ Error: "Can't connect to MongoDB"</h3>
+                <p><strong>Solución:</strong></p>
+                <pre><code># Verificar que MongoDB está corriendo
+mongod --version
+
+# Windows: Iniciar servicio
+net start MongoDB
+
+# Linux: Iniciar servicio
+sudo systemctl start mongod</code></pre>
+
+                <h3>❌ Error: "Port 8000 already in use"</h3>
+                <p><strong>Solución:</strong></p>
+                <pre><code># Usar otro puerto
+python manage.py runserver 8080
+
+# O matar el proceso en 8000
+# Windows:
+netstat -ano | findstr :8000
+taskkill /PID [número] /F
+
+# Linux:
+lsof -ti:8000 | xargs kill -9</code></pre>
+
+                <h3>❌ Error: "TemplateDoesNotExist"</h3>
+                <p><strong>Solución:</strong></p>
+                <ul>
+                    <li>Verificar que los templates están en <code>app/templates/app/</code></li>
+                    <li>Verificar <code>APP_DIRS = True</code> en settings.py</li>
+                    <li>Verificar que la app está en <code>INSTALLED_APPS</code></li>
+                </ul>
+
+                <h3>❌ Las mesas no se crean automáticamente</h3>
+                <p><strong>Solución:</strong> Ejecutar el script de creación de mesas del Paso 10</p>
+
+                <h3>❌ No puedo hacer login como admin</h3>
+                <p><strong>Solución:</strong></p>
+                <pre><code># Crear nuevo superuser
+python manage.py createsuperuser</code></pre>
+
+                <h3>🔍 Modo Debug</h3>
+                <p>Para ver errores detallados:</p>
+                <pre><code># settings.py
+DEBUG = True
+
+# Luego reiniciar el servidor
+python manage.py runserver</code></pre>
+            </section>
+        </div>
+
+        <footer>
+            <p><strong>Sistema de Reservas de Restaurante</strong></p>

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Restaurante Abad/Rod</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .hero-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .password-strength {
+            height: 4px;
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Navbar -->
+    <div class="navbar bg-gray-50 shadow-sm px-4 lg:px-20">
+        <div class="navbar-start">
+            <a href="/" class="btn btn-ghost text-xl font-bold text-gray-800">
+                <i class="fas fa-utensils text-primary"></i>
+                <span class="hidden sm:inline">Restaurante Abad/Rod</span>
+            </a>
+        </div>
+        <div class="navbar-end">
+            <a href="/clientes/login/" class="btn text-black-500 btn-sm text-gray-700">
+                <i class="fas fa-sign-in-alt mr-2"></i>
+                Iniciar Sesión
+            </a>
+        </div>
+    </div>
+
+    <!-- Registration Form -->
+    <div class="min-h-screen flex items-center justify-center py-12 px-4">
+        <div class="max-w-6xl w-full">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 bg-gray-50 rounded-2xl shadow-2xl overflow-hidden">
+                
+                <!-- Left Side - Form -->
+                <div class="p-8 lg:p-12 bg-gray-50">
+                    <div class="mb-8">
+                        <h1 class="text-3xl lg:text-4xl font-bold mb-2 text-gray-800">Crear Cuenta</h1>
+                        <p class="text-gray-600">
+                            Completa el formulario para comenzar
+                        </p>
+                    </div>
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            {% if message.tags == 'error' %}
+                                <div class="alert alert-error mb-6 shadow-lg">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    <span>{{ message }}</span>
+                                </div>
+                            {% else %}
+                                <div class="alert alert-success mb-6 shadow-lg">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>{{ message }}</span>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="POST" id="registroForm" class="space-y-4">
+                        {% csrf_token %}
+                        
+                        <!-- Nombre Completo -->
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-semibold text-gray-700">Nombre Completo</span>
+                                <span class="label-text-alt text-error">*</span>
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-user text-gray-400"></i>
+                                </div>
+                                <input 
+                                    type="text" 
+                                    name="nombre" 
+                                    id="nombre"
+                                    placeholder="Ej: Juan Pérez González" 
+                                    class="input input-bordered w-full pl-10 text-gray-800 bg-white" 
+                                    required
+                                    pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+"
+                                    title="Solo se permiten letras y espacios"
+                                >
+                            </div>
+                            <label class="label">
+                                <span class="label-text-alt text-gray-500">
+                                    <i class="fas fa-info-circle mr-1"></i>
+                                    Solo letras y espacios
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- Cédula -->
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-semibold text-gray-700">Cédula de Identidad</span>
+                                <span class="label-text-alt text-error">*</span>
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-id-card text-gray-400"></i>
+                                </div>
+                                <input 
+                                    type="text" 
+                                    name="ci" 
+                                    id="ci"
+                                    placeholder="Ej: 1234567890" 
+                                    class="input input-bordered w-full pl-10 text-gray-800 bg-white" 
+                                    required
+                                    pattern="\d{10}"
+                                    maxlength="10"
+                                    title="La cédula debe tener 10 dígitos numéricos"
+                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                >
+                            </div>
+                            <label class="label">
+                                <span class="label-text-alt text-gray-500">
+                                    <i class="fas fa-info-circle mr-1"></i>
+                                    10 dígitos numéricos
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- Teléfono -->
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-semibold text-gray-700">Teléfono Celular</span>
+                                <span class="label-text-alt text-error">*</span>
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-phone text-gray-400"></i>
+                                </div>
+                                <input 
+                                    type="tel" 
+                                    name="telefono" 
+                                    id="telefono"
+                                    placeholder="Ej: 0991234567" 
+                                    class="input input-bordered w-full pl-10 text-gray-800 bg-white" 
+                                    required
+                                    pattern="09\d{8}"
+                                    maxlength="10"
+                                    title="Debe comenzar con 09 y tener 10 dígitos"
+                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                >
+                            </div>
+                            <label class="label">
+                                <span class="label-text-alt text-gray-500">
+                                    <i class="fas fa-info-circle mr-1"></i>
+                                    Formato: 09XXXXXXXX
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-semibold text-gray-700">Correo Electrónico</span>
+                                <span class="label-text-alt text-error">*</span>
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-envelope text-gray-400"></i>
+                                </div>
+                                <input 
+                                    type="email" 
+                                    name="email" 
+                                    id="email"
+                                    placeholder="ejemplo@correo.com" 
+                                    class="input input-bordered w-full pl-10 text-gray-800 bg-white" 
+                                    required
+                                >
+                            </div>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-semibold text-gray-700">Contraseña</span>
+                                <span class="label-text-alt text-error">*</span>
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-lock text-gray-400"></i>
+                                </div>
+                                <input 
+                                    type="password" 
+                                    name="password" 
+                                    id="password"
+                                    placeholder="Mínimo 6 caracteres" 
+                                    class="input input-bordered w-full pl-10 pr-10 text-gray-800 bg-white" 
+                                    required
+                                    minlength="6"
+                                >
+                                <button 
+                                    type="button" 
+                                    onclick="togglePassword()"
+                                    class="absolute inset-y-0 right-0 pr-3 flex items-center"
+                                >
+                                    <i id="eyeIcon" class="fas fa-eye text-gray-400"></i>
+                                </button>
+                            </div>
+                            <!-- Password Strength Bar -->
+                            <div class="w-full bg-gray-200 rounded-full h-1 mt-2">
+                                <div id="strengthBar" class="h-full bg-error rounded-full transition-all duration-300" style="width: 0%"></div>
+                            </div>
+                            <label class="label">
+                                <span id="strengthText" class="label-text-alt text-gray-500">
+                                    <i class="fas fa-info-circle mr-1"></i> Mínimo 6 caracteres
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- Terms -->
+                        <div class="form-control">
+                            <label class="label cursor-pointer justify-start gap-3">
+                                <input type="checkbox" class="checkbox checkbox-primary" required />
+                                <span class="label-text text-gray-700">
+                                    Acepto los <a href="#" class="link link-primary">términos y condiciones</a>
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary w-full btn-lg text-white font-semibold">
+                            <i class="fas fa-user-plus mr-2"></i>
+                            Crear Cuenta
+                        </button>
+
+                        <!-- Divider -->
+                        <div class="divider text-gray-500">O</div>
+
+                        <!-- Login Link -->
+                        <div class="text-center">
+                            <p class="text-gray-600 mb-4">
+                                ¿Ya tienes una cuenta?
+                            </p>
+                            <a href="/clientes/login/" class="btn btn-outline btn-block btn-lg font-semibold text-gray-700 border-gray-300 hover:bg-gray-200">
+                                <i class="fas fa-sign-in-alt mr-2"></i>
+                                Iniciar Sesión
+                            </a>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Right Side - Info -->
+                <div class="gradient-bg hero-pattern p-8 lg:p-12 text-black-500 hidden lg:flex flex-col justify-center">
+                    <div class="space-y-8">
+                        <div>
+                            <div class="text-5xl mb-4">
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                            <h2 class="text-4xl font-bold mb-4">¡Únete a nosotros!</h2>
+                            <p class="text-gray-500 text-lg">
+                                Más de 2,500 clientes satisfechos ya disfrutan de nuestro sistema de reservas
+                            </p>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="flex items-start gap-4">
+                                <div class="avatar placeholder">
+                                    <div class="bg-white/20 text-white rounded-full w-12">
+                                        <i class="fas fa-bolt text-xl"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg mb-1">Proceso Rápido</h3>
+                                    <p class="text-gray-500 text-sm">
+                                        Registro en menos de 2 minutos
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-4">
+                                <div class="avatar placeholder">
+                                    <div class="bg-white/20 text-white rounded-full w-12">
+                                        <i class="fas fa-shield-alt text-xl"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg mb-1">Datos Seguros</h3>
+                                    <p class="text-gray-500 text-sm">
+                                        Protección de nivel bancario
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-4">
+                                <div class="avatar placeholder">
+                                    <div class="bg-white/20 text-white rounded-full w-12">
+                                        <i class="fas fa-gift text-xl"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg mb-1">Sin Costos</h3>
+                                    <p class="text-gray-500 text-sm">
+                                        Uso completamente gratuito
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card bg-white/10 backdrop-blur-sm border border-white/20">
+                            <div class="card-body p-6">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="rating rating-sm">
+                                        <input type="radio" class="mask mask-star-2 bg-yellow-400" checked disabled />
+                                        <input type="radio" class="mask mask-star-2 bg-yellow-400" checked disabled />
+                                        <input type="radio" class="mask mask-star-2 bg-yellow-400" checked disabled />
+                                        <input type="radio" class="mask mask-star-2 bg-yellow-400" checked disabled />
+                                        <input type="radio" class="mask mask-star-2 bg-yellow-400" checked disabled />
+                                    </div>
+                                    <span class="font-bold">5.0</span>
+                                </div>
+                                <p class="text-gray-500 text-sm italic">
+                                    "El mejor sistema de reservas que he usado. Súper intuitivo y rápido."
+                                </p>
+                                <p class="text-gray-400 text-xs mt-2">
+                                    - María González
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle password visibility
+        function togglePassword() {
+            const password = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            
+            if (password.type === 'password') {
+                password.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                password.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        }
+
+        // Password strength checker
+        document.getElementById('password').addEventListener('input', function(e) {
+            const password = e.target.value;
+            const strengthBar = document.getElementById('strengthBar');
+            const strengthText = document.getElementById('strengthText');
+            
+            let strength = 0;
+            if (password.length >= 6) strength += 25;
+            if (password.length >= 8) strength += 25;
+            if (/[A-Z]/.test(password)) strength += 25;
+            if (/[0-9]/.test(password)) strength += 25;
+            
+            strengthBar.style.width = strength + '%';
+            
+            if (strength === 0) {
+                strengthBar.className = 'h-full bg-error transition-all duration-300';
+                strengthText.innerHTML = '<i class="fas fa-info-circle mr-1"></i> Mínimo 6 caracteres';
+                strengthText.className = 'label-text-alt text-gray-500';
+            } else if (strength <= 25) {
+                strengthBar.className = 'h-full bg-error transition-all duration-300';
+                strengthText.innerHTML = '<i class="fas fa-times-circle mr-1"></i> Contraseña débil';
+                strengthText.className = 'label-text-alt text-error';
+            } else if (strength <= 50) {
+                strengthBar.className = 'h-full bg-warning transition-all duration-300';
+                strengthText.innerHTML = '<i class="fas fa-exclamation-circle mr-1"></i> Contraseña media';
+                strengthText.className = 'label-text-alt text-warning';
+            } else if (strength <= 75) {
+                strengthBar.className = 'h-full bg-info transition-all duration-300';
+                strengthText.innerHTML = '<i class="fas fa-check-circle mr-1"></i> Contraseña buena';
+                strengthText.className = 'label-text-alt text-info';
+            } else {
+                strengthBar.className = 'h-full bg-success transition-all duration-300';
+                strengthText.innerHTML = '<i class="fas fa-check-circle mr-1"></i> Contraseña fuerte';
+                strengthText.className = 'label-text-alt text-success';
+            }
+        });
+
+        // Format nombre to uppercase on blur
+        document.getElementById('nombre').addEventListener('blur', function(e) {
+            e.target.value = e.target.value.toUpperCase();
+        });
+
+        // Format email to lowercase
+        document.getElementById('email').addEventListener('input', function(e) {
+            e.target.value = e.target.value.toLowerCase();
+        });
+
+        // Form validation feedback
+        const form = document.getElementById('registroForm');
+        form.addEventListener('submit', function(e) {
+            const inputs = form.querySelectorAll('input[required]');
+            let valid = true;
+            
+            inputs.forEach(input => {
+                if (!input.checkValidity()) {
+                    input.classList.add('input-error');
+                    valid = false;
+                } else {
+                    input.classList.remove('input-error');
+                }
+            });
+            
+            if (!valid) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>

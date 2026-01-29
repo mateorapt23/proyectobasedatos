@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes - Panel Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        * { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-base-200">
+    <div class="drawer lg:drawer-open">
+        <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+        
+        <div class="drawer-content flex flex-col">
+            <!-- Navbar -->
+            <div class="navbar bg-base-100 shadow-sm border-b">
+                <div class="flex-none lg:hidden">
+                    <label for="my-drawer" class="btn btn-square btn-ghost">
+                        <i class="fas fa-bars"></i>
+                    </label>
+                </div>
+                <div class="flex-1 px-4">
+                    <a href="{% url 'panel_admin' %}" class="btn btn-ghost btn-sm">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <h1 class="text-xl font-bold ml-2">Gestión de Clientes</h1>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="p-4 lg:p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-3xl font-bold">Clientes Registrados</h2>
+                    <div class="badge badge-primary badge-lg">Total: {{ clientes|length }}</div>
+                </div>
+
+                <!-- Table -->
+                <div class="card bg-base-100 shadow-xl">
+                    <div class="card-body">
+                        <div class="overflow-x-auto">
+                            <table class="table table-zebra">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Nombre</th>
+                                        <th>Cédula</th>
+                                        <th>Email</th>
+                                        <th>Teléfono</th>
+                                        <th>Reservas</th>
+                                        <th>Facturas</th>
+                                        <th>Registro</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for cliente in clientes %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>
+                                            <div class="flex items-center gap-2">
+                                                <div class="avatar placeholder">
+                                                    <div class="bg-primary/10 text-primary rounded-full w-8">
+                                                        <span class="text-xs">{{ cliente.nombre|slice:":1" }}</span>
+                                                    </div>
+                                                </div>
+                                                <span class="font-bold">{{ cliente.nombre }}</span>
+                                            </div>
+                                        </td>
+                                        <td>{{ cliente.ci }}</td>
+                                        <td>{{ cliente.email }}</td>
+                                        <td>{{ cliente.telefono }}</td>
+                                        <td><span class="badge badge-secondary">{{ cliente.total_reservas }}</span></td>
+                                        <td><span class="badge badge-accent">{{ cliente.total_facturas }}</span></td>
+                                        <td>{{ cliente.fecha_registro|date:"d/m/Y" }}</td>
+                                        <td>
+                                            <div class="flex gap-2">
+                                                <!-- Botón Editar -->
+                                                <button 
+                                                    class="btn btn-sm btn-warning text-white"
+                                                    onclick="abrirEditarModal('{{ cliente.id }}', '{{ cliente.nombre }}', '{{ cliente.ci }}', '{{ cliente.email }}', '{{ cliente.telefono }}')"
+                                                >
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                
+                                                <!-- Botón Eliminar -->
+                                                <button 
+                                                    class="btn btn-sm btn-error text-white"
+                                                    onclick="abrirEliminarModal('{{ cliente.id }}', '{{ cliente.nombre }}', {{ cliente.total_reservas }})"
+                                                >
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="9" class="text-center py-8">
+                                            <i class="fas fa-inbox text-6xl text-base-content/20 mb-4 block"></i>
+                                            <p>No hay clientes registrados</p>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="drawer-side">
+            <label for="my-drawer" class="drawer-overlay"></label>
+            <div class="menu p-4 w-80 min-h-full bg-base-100 border-r">
+                <div class="px-4 py-6 border-b mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="avatar placeholder">
+                            <div class="bg-primary text-primary-content rounded-xl w-12">
+                                <i class="fas fa-utensils text-2xl"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="font-bold text-lg">Admin Panel</div>
+                            <div class="text-xs text-base-content/60">Restaurante Abad/Rod</div>
+                        </div>
+                    </div>
+                </div>
+                <ul class="space-y-1">
+                    <li><a href="{% url 'panel_admin' %}"><i class="fas fa-home"></i> Inicio</a></li>
+                    <li><a href="{% url 'clientes_admin' %}" class="active"><i class="fas fa-users"></i> Clientes</a></li>
+                    <li><a href="{% url 'mesas_admin' %}"><i class="fas fa-chair"></i> Mesas</a></li>
+                    <li><a href="{% url 'facturas_admin' %}"><i class="fas fa-file-invoice"></i> Facturas</a></li>
+                    <li><a href="{% url 'informes_admin' %}"><i class="fas fa-chart-bar"></i> Informes</a></li>
+                    <div class="divider"></div>
+                    <li><a href="{% url 'logout_admin' %}" class="text-error"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Cliente -->
+    <dialog id="editarModal" class="modal">
+        <div class="modal-box max-w-2xl">
+            <h3 class="font-bold text-2xl mb-4">
+                <i class="fas fa-user-edit text-warning mr-2"></i>
+                Editar Cliente
+            </h3>
+            
+            <form method="POST" action="" id="editarForm">
+                {% csrf_token %}
+                
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text font-semibold">Nombre Completo</span>
+                        <span class="label-text-alt text-error">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        name="nombre" 
+                        id="editNombre"
+                        class="input input-bordered" 
+                        placeholder="Ej: Juan Pérez" 
+                        required
+                    >
+                </div>
+
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text font-semibold">Cédula</span>
+                        <span class="label-text-alt text-error">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        name="ci" 
+                        id="editCi"
+                        class="input input-bordered" 
+                        placeholder="Ej: 1234567890" 
+                        required
+                        maxlength="10"
+                    >
+                </div>
+
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text font-semibold">Email</span>
+                        <span class="label-text-alt text-error">*</span>
+                    </label>
+                    <input 
+                        type="email" 
+                        name="email" 
+                        id="editEmail"
+                        class="input input-bordered" 
+                        placeholder="Ej: cliente@email.com" 
+                        required
+                    >
+                </div>
+
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text font-semibold">Teléfono</span>
+                        <span class="label-text-alt text-error">*</span>
+                    </label>
+                    <input 
+                        type="tel" 
+                        name="telefono" 
+                        id="editTelefono"
+                        class="input input-bordered" 
+                        placeholder="Ej: 0999999999" 
+                        required
+                        maxlength="10"
+                    >
+                </div>
+
+                <div class="alert alert-info mb-4">
+                    <i class="fas fa-info-circle"></i>
+                    <span class="text-sm">Los cambios se guardarán inmediatamente y se registrarán en el historial del cliente.</span>
+                </div>
+
+                <div class="modal-action">
+                    <button type="button" class="btn" onclick="editarModal.close()">Cancelar</button>
+                    <button type="submit" class="btn btn-warning text-white">
+                        <i class="fas fa-save mr-2"></i> Guardar Cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+        <form method="dialog" class="modal-backdrop"><button>close</button></form>
+    </dialog>
+
+    <!-- Modal Eliminar Cliente -->
+    <dialog id="eliminarModal" class="modal">
+        <div class="modal-box">
+            <h3 class="font-bold text-2xl mb-4">
+                <i class="fas fa-exclamation-triangle text-error mr-2"></i>
+                Confirmar Eliminación
+            </h3>
+            
+            <div class="alert alert-error mb-4">
+                <i class="fas fa-warning"></i>
+                <div>
+                    <p class="font-bold">¡Esta acción no se puede deshacer!</p>
+                    <p class="text-sm">Se eliminará permanentemente el cliente de la base de datos.</p>
+                </div>
+            </div>
+
+            <p class="mb-4">
+                ¿Estás seguro de que deseas eliminar al cliente <strong id="eliminarNombre"></strong>?
+            </p>
+
+            <div id="advertenciaReservas" class="alert alert-warning mb-4" style="display: none;">
+                <i class="fas fa-info-circle"></i>
+                <span class="text-sm">Este cliente tiene <strong><span id="cantidadReservas"></span> reserva(s) activa(s)</strong>. No se puede eliminar.</span>
+            </div>
+            
+            <form method="POST" action="" id="eliminarForm">
+                {% csrf_token %}
+                <div class="modal-action">
+                    <button type="button" class="btn" onclick="eliminarModal.close()">Cancelar</button>
+                    <button type="submit" class="btn btn-error text-white" id="btnEliminar">
+                        <i class="fas fa-trash mr-2"></i> Sí, Eliminar
+                    </button>
+                </div>
+            </form>
+        </div>
+        <form method="dialog" class="modal-backdrop"><button>close</button></form>
+    </dialog>
+
+    <script>
+        function abrirEditarModal(clienteId, nombre, ci, email, telefono) {
+            document.getElementById('editNombre').value = nombre;
+            document.getElementById('editCi').value = ci;
+            document.getElementById('editEmail').value = email;
+            document.getElementById('editTelefono').value = telefono;
+            document.getElementById('editarForm').action = `/admin/clientes/editar/${clienteId}/`;
+            editarModal.showModal();
+        }
+
+        function abrirEliminarModal(clienteId, nombre, reservasActivas) {
+            document.getElementById('eliminarNombre').textContent = nombre;
+            document.getElementById('eliminarForm').action = `/admin/clientes/eliminar/${clienteId}/`;
+            
+            const advertencia = document.getElementById('advertenciaReservas');
+            const btnEliminar = document.getElementById('btnEliminar');
+            
+            if (reservasActivas > 0) {
+                document.getElementById('cantidadReservas').textContent = reservasActivas;
+                advertencia.style.display = 'flex';
+                btnEliminar.disabled = true;
+                btnEliminar.classList.add('btn-disabled');
+            } else {
+                advertencia.style.display = 'none';
+                btnEliminar.disabled = false;
+                btnEliminar.classList.remove('btn-disabled');
+            }
+            
+            eliminarModal.showModal();
+        }
+    </script>
+</body>
+</html>

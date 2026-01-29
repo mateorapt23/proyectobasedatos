@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manuales - Sistema de Reservas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 800px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .shortcuts-info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .shortcut-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1rem 0;
+            gap: 1rem;
+        }
+
+        .key {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .key-description {
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .manual-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Manuales del Sistema</h1>
+        <p class="subtitle">Documentación Completa</p>
+
+        <div class="shortcuts-info">
+            <h3 style="color: #667eea; margin-bottom: 1.5rem;">⌨️ Atajos de Teclado</h3>
+            
+            <div class="shortcut-item">
+                <span class="key">F2</span>
+                <span class="key-description">Abrir Manual de Usuario</span>
+            </div>
+
+            <div class="shortcut-item">
+                <span class="key">F3</span>
+                <span class="key-description">Abrir Manual de Instalación</span>
+            </div>
+        </div>
+
+        <div class="manual-buttons">
+            <a href="/manuales/manual-usuario/" class="btn" target="_blank">
+                📖 Manual de Usuario
+            </a>
+            <a href="/manuales/manual-instalacion/" class="btn" target="_blank">
+                🔧 Manual de Instalación
+            </a>
+            <a href="/" class="btn btn-secondary">
+                🏠 Volver al Sistema
+            </a>
+        </div>
+
+        <p style="margin-top: 2rem; color: #999; font-size: 0.9rem;">
+            Los atajos F2 y F3 funcionan desde cualquier página del sistema
+        </p>
+    </div>
+
+    <script>
+        // Detectar atajos de teclado F2 y F3
+        document.addEventListener('keydown', function(event) {
+            console.log('Tecla presionada:', event.key); // Debug en consola
+            
+            // F2 - Abrir Manual de Usuario
+            if (event.key === 'F2') {
+                event.preventDefault(); // Prevenir comportamiento del navegador
+                console.log('✅ F2 detectada - Abriendo Manual de Usuario');
+                window.open('/manuales/manual-usuario/', '_blank');
+            }
+            
+            // F3 - Abrir Manual de Instalación
+            if (event.key === 'F3') {
+                event.preventDefault(); // Prevenir comportamiento del navegador
+                console.log('✅ F3 detectada - Abriendo Manual de Instalación');
+                window.open('/manuales/manual-instalacion/', '_blank');
+            }
+        });
+
+        // Mensaje de bienvenida en consola
+        console.log('%c⌨️ Atajos de Teclado Activos', 'color: #667eea; font-size: 16px; font-weight: bold;');
+        console.log('%cF2 → Manual de Usuario', 'color: #10b981; font-size: 14px;');
+        console.log('%cF3 → Manual de Instalación', 'color: #10b981; font-size: 14px;');
+        console.log('%cPresiona F12 para ver esta consola de debug', 'color: #ffc107; font-size: 12px;');
+    </script>
+</body>
+</html>

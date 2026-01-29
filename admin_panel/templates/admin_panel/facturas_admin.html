@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facturas - Panel Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        * { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-base-200">
+    <div class="drawer lg:drawer-open">
+        <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+        
+        <div class="drawer-content flex flex-col">
+            <div class="navbar bg-base-100 shadow-sm border-b">
+                <div class="flex-none lg:hidden">
+                    <label for="my-drawer" class="btn btn-square btn-ghost"><i class="fas fa-bars"></i></label>
+                </div>
+                <div class="flex-1 px-4">
+                    <a href="{% url 'panel_admin' %}" class="btn btn-ghost btn-sm"><i class="fas fa-arrow-left"></i></a>
+                    <h1 class="text-xl font-bold ml-2">Gestión de Facturas</h1>
+                </div>
+            </div>
+
+            <div class="p-4 lg:p-8">
+                <h2 class="text-3xl font-bold mb-6">Facturas del Sistema</h2>
+
+                <!-- Filtros Tabs -->
+                <div class="tabs tabs-boxed bg-base-100 p-1 mb-6 shadow-lg">
+                    <a href="?filtro=pendientes" class="tab tab-lg {% if filtro == 'pendientes' %}tab-active{% endif %}">
+                        <i class="fas fa-exclamation-circle mr-2"></i> Pendientes
+                    </a>
+                    <a href="?filtro=pagadas" class="tab tab-lg {% if filtro == 'pagadas' %}tab-active{% endif %}">
+                        <i class="fas fa-check-circle mr-2"></i> Pagadas
+                    </a>
+                    <a href="?filtro=todas" class="tab tab-lg {% if filtro == 'todas' %}tab-active{% endif %}">
+                        <i class="fas fa-list mr-2"></i> Todas
+                    </a>
+                </div>
+
+                <!-- Tabla -->
+                <div class="card bg-base-100 shadow-xl">
+                    <div class="card-body">
+                        <div class="overflow-x-auto">
+                            <table class="table table-zebra">
+                                <thead>
+                                    <tr>
+                                        <th>Factura N°</th>
+                                        <th>Cliente</th>
+                                        <th>Mesa</th>
+                                        <th>Fecha Reserva</th>
+                                        <th>Total</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for factura in facturas %}
+                                    <tr>
+                                        <td><span class="font-mono font-bold">{{ factura.numero }}</span></td>
+                                        <td>{{ factura.cliente.nombre }}</td>
+                                        <td class="text-center"><span class="badge badge-secondary">Mesa {{ factura.reserva.numeroMesa }}</span></td>
+                                        <td>{{ factura.reserva.fecha|date:"d/m/Y" }} {{ factura.reserva.hora }}</td>
+                                        <td><span class="font-bold text-lg">${{ factura.total }}</span>
+                                            {% if factura.esGarantia %}<br><span class="badge badge-warning badge-sm">Garantía</span>{% endif %}
+                                        </td>
+                                        <td>
+                                            {% if factura.estado == "Pagada" %}
+                                                <div class="badge badge-success text-white">Pagada</div>
+                                            {% else %}
+                                                <div class="badge badge-warning text-white">Pendiente</div>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if factura.esGarantia and factura.estado == "Pendiente" %}
+                                                <button class="btn btn-primary btn-sm text-white" onclick="abrirActualizarFactura('{{ factura.id }}', '{{ factura.numero }}', '{{ factura.cliente.nombre }}', {{ factura.reserva.numeroMesa }})">
+                                                    <i class="fas fa-edit mr-1"></i> Actualizar
+                                                </button>
+                                            {% else %}
+                                                <span class="text-success"><i class="fas fa-check-circle"></i> Procesada</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="7" class="text-center py-8">
+                                            <i class="fas fa-inbox text-6xl text-base-content/20 mb-4 block"></i>
+                                            <p>No hay facturas en esta categoría</p>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="drawer-side">
+            <label for="my-drawer" class="drawer-overlay"></label>
+            <div class="menu p-4 w-80 min-h-full bg-base-100 border-r">
+                <div class="px-4 py-6 border-b mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="avatar placeholder">
+                            <div class="bg-primary text-primary-content rounded-xl w-12">
+                                <i class="fas fa-utensils text-2xl"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="font-bold text-lg">Admin Panel</div>
+                            <div class="text-xs text-base-content/60">Restaurante Abad/Rod</div>
+                        </div>
+                    </div>
+                </div>
+                <ul class="space-y-1">
+                    <li><a href="{% url 'panel_admin' %}"><i class="fas fa-home"></i> Inicio</a></li>
+                    <li><a href="{% url 'clientes_admin' %}"><i class="fas fa-users"></i> Clientes</a></li>
+                    <li><a href="{% url 'mesas_admin' %}"><i class="fas fa-chair"></i> Mesas</a></li>
+                    <li><a href="{% url 'facturas_admin' %}" class="active"><i class="fas fa-file-invoice"></i> Facturas</a></li>
+                    <li><a href="{% url 'informes_admin' %}"><i class="fas fa-chart-bar"></i> Informes</a></li>
+                    <div class="divider"></div>
+                    <li><a href="{% url 'logout_admin' %}" class="text-error"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Actualizar Factura -->
+    <dialog id="actualizarModal" class="modal">
+        <div class="modal-box max-w-2xl">
+            <h3 class="font-bold text-2xl mb-4">
+                <i class="fas fa-file-invoice-dollar text-primary mr-2"></i>
+                Actualizar Factura
+            </h3>
+            
+            <div class="alert alert-info mb-4">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <p class="text-sm"><strong>Factura:</strong> <span id="modalNumero"></span></p>
+                    <p class="text-sm"><strong>Cliente:</strong> <span id="modalCliente"></span></p>
+                    <p class="text-sm"><strong>Mesa:</strong> <span id="modalMesa"></span></p>
+                </div>
+            </div>
+
+            <form method="POST" action="" id="actualizarForm">
+                {% csrf_token %}
+                
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text font-semibold">Detalles del Consumo</span>
+                        <span class="label-text-alt text-error">*</span>
+                    </label>
+                    <textarea 
+                        name="detalles_consumo" 
+                        class="textarea textarea-bordered h-24" 
+                        placeholder="Ej: 2 Platos Ejecutivos, 2 Bebidas, 1 Postre..." 
+                        required
+                    ></textarea>
+                </div>
+
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text font-semibold">Subtotal del Consumo (USD)</span>
+                        <span class="label-text-alt text-error">*</span>
+                    </label>
+                    <input 
+                        type="number" 
+                        name="subtotal_consumo" 
+                        class="input input-bordered" 
+                        placeholder="0.00" 
+                        step="0.01" 
+                        min="0.01" 
+                        required
+                        id="subtotalInput"
+                        oninput="calcularTotal()"
+                    >
+                    <label class="label">
+                        <span class="label-text-alt text-warning">Incluye la garantía de $30. Se restará automáticamente.</span>
+                    </label>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="bg-base-200 p-4 rounded-lg mb-4">
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <span class="opacity-60">Subtotal Consumo:</span>
+                            <span class="font-bold ml-2">$<span id="previewSubtotal">0.00</span></span>
+                        </div>
+                        <div>
+                            <span class="opacity-60">Garantía:</span>
+                            <span class="font-bold ml-2 text-warning">- $30.00</span>
+                        </div>
+                        <div>
+                            <span class="opacity-60">Subtotal Final:</span>
+                            <span class="font-bold ml-2">$<span id="previewSubtotalFinal">0.00</span></span>
+                        </div>
+                        <div>
+                            <span class="opacity-60">IVA (12%):</span>
+                            <span class="font-bold ml-2">$<span id="previewIVA">0.00</span></span>
+                        </div>
+                    </div>
+                    <div class="divider my-2"></div>
+                    <div class="text-lg">
+                        <span class="font-bold">TOTAL A PAGAR:</span>
+                        <span class="font-bold text-success ml-2 text-2xl">$<span id="previewTotal">0.00</span></span>
+                    </div>
+                </div>
+
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle"></i>
+                    <span class="text-sm">Al actualizar, la factura cambiará a estado "Pagada" y el cliente recibirá una notificación.</span>
+                </div>
+
+                <div class="modal-action">
+                    <button type="button" class="btn" onclick="actualizarModal.close()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary text-white">
+                        <i class="fas fa-save mr-2"></i> Actualizar Factura
+                    </button>
+                </div>
+            </form>
+        </div>
+        <form method="dialog" class="modal-backdrop"><button>close</button></form>
+    </dialog>
+
+    <script>
+        function abrirActualizarFactura(facturaId, numero, cliente, mesa) {
+            document.getElementById('modalNumero').textContent = numero;
+            document.getElementById('modalCliente').textContent = cliente;
+            document.getElementById('modalMesa').textContent = 'Mesa ' + mesa;
+            document.getElementById('actualizarForm').action = `/admin/facturas/actualizar/${facturaId}/`;
+            actualizarModal.showModal();
+        }
+
+        function calcularTotal() {
+            const subtotalConsumo = parseFloat(document.getElementById('subtotalInput').value) || 0;
+            const garantia = 30.00;
+            
+            const subtotalFinal = Math.max(0, subtotalConsumo - garantia);
+            const iva = subtotalFinal * 0.12;
+            const total = subtotalFinal + iva;
+            
+            document.getElementById('previewSubtotal').textContent = subtotalConsumo.toFixed(2);
+            document.getElementById('previewSubtotalFinal').textContent = subtotalFinal.toFixed(2);
+            document.getElementById('previewIVA').textContent = iva.toFixed(2);
+            document.getElementById('previewTotal').textContent = total.toFixed(2);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin - Sistema de Reservas</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        * { font-family: 'Inter', sans-serif; }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-4px);
+        }
+    </style>
+</head>
+<body class="bg-base-200">
+    <div class="drawer lg:drawer-open">
+        <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+        
+        <div class="drawer-content flex flex-col">
+            <!-- Navbar -->
+            <div class="navbar bg-base-100 shadow-sm border-b border-base-200">
+                <div class="flex-none lg:hidden">
+                    <label for="my-drawer" class="btn btn-square btn-ghost">
+                        <i class="fas fa-bars text-xl"></i>
+                    </label>
+                </div>
+                <div class="flex-1 px-4">
+                    <h1 class="text-xl font-bold">Panel de Administración</h1>
+                </div>
+                <div class="flex-none">
+                    <div class="dropdown dropdown-end">
+                        <label tabindex="0" class="btn btn-ghost btn-circle avatar">
+                            <div class="w-10 h-10 rounded-full bg-primary text-primary-content flex items-center justify-center font-bold text-lg pt-1">
+                                <i class="fas fa-user-shield"></i>
+                            </div>
+                        </label>
+                        <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-lg bg-base-100 rounded-box w-52 border border-base-200">
+                            <li class="menu-title">
+                                <span class="text-base font-bold">{{ username }}</span>
+                            </li>
+                            <div class="divider my-1"></div>
+                            <li><a href="{% url 'logout_admin' %}" class="text-error"><i class="fas fa-sign-out-alt mr-2"></i> Cerrar Sesión</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="p-4 lg:p-8">
+                <!-- Welcome Section -->
+                <div class="gradient-bg rounded-2xl p-8 text-white mb-6 shadow-xl">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-3xl font-bold mb-2">¡Bienvenido, {{ username }}!</h2>
+                            <p class="text-white/90">Panel de control y gestión del restaurante</p>
+                        </div>
+                        <div class="avatar placeholder hidden md:block">
+                            <div class="bg-white/20 text-white rounded-full w-16">
+                                <i class="fas fa-user-shield text-3xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    <div class="stat bg-base-100 rounded-xl shadow-lg stat-card border border-base-200">
+                        <div class="stat-figure text-primary">
+                            <i class="fas fa-users text-4xl"></i>
+                        </div>
+                        <div class="stat-title">Total Clientes</div>
+                        <div class="stat-value text-primary">{{ total_clientes }}</div>
+                        <div class="stat-desc">Registrados en el sistema</div>
+                    </div>
+
+                    <div class="stat bg-base-100 rounded-xl shadow-lg stat-card border border-base-200">
+                        <div class="stat-figure text-secondary">
+                            <i class="fas fa-calendar-check text-4xl"></i>
+                        </div>
+                        <div class="stat-title">Total Reservas</div>
+                        <div class="stat-value text-secondary">{{ total_reservas }}</div>
+                        <div class="stat-desc">Histórico completo</div>
+                    </div>
+
+                    <div class="stat bg-base-100 rounded-xl shadow-lg stat-card border border-base-200">
+                        <div class="stat-figure text-accent">
+                            <i class="fas fa-chair text-4xl"></i>
+                        </div>
+                        <div class="stat-title">Total Mesas</div>
+                        <div class="stat-value text-accent">{{ total_mesas }}</div>
+                        <div class="stat-desc">Mesas disponibles</div>
+                    </div>
+
+                    <div class="stat bg-base-100 rounded-xl shadow-lg stat-card border border-base-200">
+                        <div class="stat-figure text-success">
+                            <i class="fas fa-file-invoice text-4xl"></i>
+                        </div>
+                        <div class="stat-title">Facturas</div>
+                        <div class="stat-value text-success">{{ total_facturas }}</div>
+                        <div class="stat-desc">Generadas</div>
+                    </div>
+                </div>
+
+                <!-- Today's Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div class="card bg-base-100 shadow-xl border border-base-200">
+                        <div class="card-body">
+                            <h2 class="card-title">
+                                <i class="fas fa-calendar-day text-warning mr-2"></i>
+                                Hoy
+                            </h2>
+                            <div class="stats stats-vertical shadow">
+                                <div class="stat">
+                                    <div class="stat-title">Reservas de Hoy</div>
+                                    <div class="stat-value text-warning">{{ reservas_hoy }}</div>
+                                    <div class="stat-desc">{{ "now"|date:"d/m/Y" }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card bg-base-100 shadow-xl border border-base-200">
+                        <div class="card-body">
+                            <h2 class="card-title">
+                                <i class="fas fa-exclamation-triangle text-error mr-2"></i>
+                                Pendientes
+                            </h2>
+                            <div class="stats stats-vertical shadow">
+                                <div class="stat">
+                                    <div class="stat-title">Facturas Pendientes</div>
+                                    <div class="stat-value text-error">{{ facturas_pendientes }}</div>
+                                    <div class="stat-desc">Garantías por procesar</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="card bg-base-100 shadow-xl mb-6 border border-base-200">
+                    <div class="card-body">
+                        <h2 class="card-title text-2xl mb-4">
+                            <i class="fas fa-bolt text-primary mr-2"></i>
+                            Acciones Rápidas
+                        </h2>
+                        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                            <a href="{% url 'clientes_admin' %}" class="btn btn-lg btn-outline flex-col h-auto py-6 gap-2 hover:btn-primary">
+                                <i class="fas fa-users text-3xl"></i>
+                                <span class="text-sm">Ver Clientes</span>
+                            </a>
+                            <a href="{% url 'mesas_admin' %}" class="btn btn-lg btn-outline flex-col h-auto py-6 gap-2 hover:btn-secondary">
+                                <i class="fas fa-chair text-3xl"></i>
+                                <span class="text-sm">Gestionar Mesas</span>
+                            </a>
+                            <a href="{% url 'facturas_admin' %}" class="btn btn-lg btn-outline flex-col h-auto py-6 gap-2 hover:btn-accent">
+                                <i class="fas fa-file-invoice text-3xl"></i>
+                                <span class="text-sm">Facturas</span>
+                            </a>
+                            <a href="{% url 'informes_admin' %}" class="btn btn-lg btn-outline flex-col h-auto py-6 gap-2 hover:btn-info">
+                                <i class="fas fa-chart-bar text-3xl"></i>
+                                <span class="text-sm">Informes</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Últimas Reservas -->
+                    <div class="card bg-base-100 shadow-xl border border-base-200">
+                        <div class="card-body">
+                            <h2 class="card-title text-xl mb-4">
+                                <i class="fas fa-history text-primary mr-2"></i>
+                                Últimas Reservas
+                            </h2>
+                            
+                            {% if ultimas_reservas %}
+                                <div class="space-y-3">
+                                    {% for reserva in ultimas_reservas %}
+                                    <div class="alert shadow-sm border border-base-200">
+                                        <div class="flex items-start gap-3 w-full">
+                                            <div class="avatar placeholder">
+                                                <div class="bg-primary/10 text-primary rounded-full w-12">
+                                                    <i class="fas fa-utensils"></i>
+                                                </div>
+                                            </div>
+                                            <div class="flex-1">
+                                                <div class="font-bold">{{ reserva.cliente.nombre }}</div>
+                                                <div class="text-sm opacity-70">
+                                                    Mesa {{ reserva.mesa.numeroMesa }} - {{ reserva.fecha|date:"d/m/Y" }} {{ reserva.hora }}
+                                                </div>
+                                            </div>
+                                            <div class="badge badge-{{ reserva.estado|lower }}">{{ reserva.estado }}</div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="text-center py-8">
+                                    <i class="fas fa-inbox text-6xl text-base-content/20 mb-4"></i>
+                                    <p class="text-base-content/60">No hay reservas recientes</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Clientes Recientes -->
+                    <div class="card bg-base-100 shadow-xl border border-base-200">
+                        <div class="card-body">
+                            <h2 class="card-title text-xl mb-4">
+                                <i class="fas fa-user-plus text-secondary mr-2"></i>
+                                Clientes Recientes
+                            </h2>
+                            
+                            {% if clientes_recientes %}
+                                <div class="space-y-3">
+                                    {% for cliente in clientes_recientes %}
+                                    <div class="alert shadow-sm border border-base-200">
+                                        <div class="flex items-start gap-3 w-full">
+                                            <div class="avatar placeholder">
+                                                <div class="bg-secondary/10 text-secondary rounded-full w-12">
+                                                    <span class="text-xl">{{ cliente.nombre|slice:":1" }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-1">
+                                                <div class="font-bold">{{ cliente.nombre }}</div>
+                                                <div class="text-sm opacity-70">
+                                                    {{ cliente.email }}
+                                                </div>
+                                            </div>
+                                            <div class="text-xs opacity-60">
+                                                {{ cliente.fecha_registro|date:"d/m/Y" }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="text-center py-8">
+                                    <i class="fas fa-inbox text-6xl text-base-content/20 mb-4"></i>
+                                    <p class="text-base-content/60">No hay clientes recientes</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="drawer-side">
+            <label for="my-drawer" class="drawer-overlay"></label>
+            <div class="menu p-4 w-80 min-h-full bg-base-100 border-r border-base-200">
+                <!-- Logo -->
+                <div class="px-4 py-6 border-b border-base-200 mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="avatar placeholder">
+                            <div class="bg-primary text-primary-content rounded-xl w-12">
+                                <i class="fas fa-utensils text-2xl"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="font-bold text-lg">Admin Panel</div>
+                            <div class="text-xs text-base-content/60">Restaurante Abad/Rod</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Info -->
+                <div class="px-4 py-4 bg-base-200 rounded-xl mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="avatar placeholder">
+                            <div class="bg-primary text-primary-content rounded-full w-12">
+                                <i class="fas fa-user-shield"></i>
+                            </div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="font-bold truncate">{{ username }}</div>
+                            <div class="text-xs text-base-content/60">Administrador</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <ul class="space-y-1">
+                    <li>
+                        <a href="{% url 'panel_admin' %}" class="active">
+                            <i class="fas fa-home text-lg"></i>
+                            Inicio
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'clientes_admin' %}">
+                            <i class="fas fa-users text-lg"></i>
+                            Clientes
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'mesas_admin' %}">
+                            <i class="fas fa-chair text-lg"></i>
+                            Mesas
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'facturas_admin' %}">
+                            <i class="fas fa-file-invoice text-lg"></i>
+                            Facturas
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'informes_admin' %}">
+                            <i class="fas fa-chart-bar text-lg"></i>
+                            Informes
+                        </a>
+                    </li>
+                    <div class="divider my-2"></div>
+                    <li>
+                        <a href="{% url 'logout_admin' %}" class="text-error">
+                            <i class="fas fa-sign-out-alt text-lg"></i>
+                            Cerrar Sesión
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Close drawer on navigation (mobile)
+        document.querySelectorAll('.drawer-side a').forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth < 1024) {
+                    document.getElementById('my-drawer').checked = false;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

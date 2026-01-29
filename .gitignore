@@ -1,0 +1,135 @@
+# Python
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+/media
+/staticfiles
+/static
+
+# MongoDB
+*.bson
+dump/
+
+# Secrets - IMPORTANTE
+.env
+*.env
+secrets.json
+config.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Pytest
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre
+.pyre/
+
+# pytype
+.pytype/
+
+# Cython
+cython_debug/
+
+# Archivos de sistema
+Thumbs.db
+.DS_Store
+
+# Archivos temporales
+*.tmp
+*.bak
+*.swp
+*~
+
+# Logs
+logs/
+*.log
+
+# Node modules (si usas Node.js para frontend)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Archivos de compilación
+*.pyc
+__pycache__/
+
+# Archivos de backup de base de datos
+*.sql
+*.dump
+
+# Certificados SSL (nunca subir estos)
+*.pem
+*.key
+*.crt
+
+# Configuraciones locales específicas del desarrollador
+local_settings.py
+settings_local.py
